@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Dekel Application" Height="750" Width="1150"
         MinWidth="900" MinHeight="600"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual" Top="80" Left="100"
         Background="#F8FAFC">
     <Window.Resources>
         <!-- DataTemplates -->
