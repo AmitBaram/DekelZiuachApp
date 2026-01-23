@@ -1,0 +1,127 @@
+<UserControl x:Class="DekelApp.Views.FormatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Margin="0,0,0,30">
+            <StackPanel Orientation="Horizontal">
+                <Border Width="45" Height="45" Background="{StaticResource LightBlueBrush}" CornerRadius="12" Margin="0,0,15,0">
+                    <Path Data="{StaticResource IconFormats}" Fill="{StaticResource PrimaryBlueBrush}" Stretch="Uniform" Margin="12"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Formats" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <TextBlock Text="Select the output formats for your project." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Status Boxes -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,30">
+            <!-- MFT Box -->
+            <Border>
+                <Border.Style>
+                    <Style TargetType="Border" BasedOn="{StaticResource StatusBoxStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MFT}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="MFT" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- CDB Box -->
+            <Border>
+                <Border.Style>
+                    <Style TargetType="Border" BasedOn="{StaticResource StatusBoxStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CDB}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="CDB" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- VBS3 Box -->
+            <Border>
+                <Border.Style>
+                    <Style TargetType="Border" BasedOn="{StaticResource StatusBoxStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding VBS3}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="VBS3" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- VBS4 Box -->
+            <Border>
+                <Border.Style>
+                    <Style TargetType="Border" BasedOn="{StaticResource StatusBoxStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding VBS4}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="VBS4" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!-- Toggle List Card -->
+        <Border Grid.Row="2" Style="{StaticResource ContentCardStyle}">
+            <StackPanel>
+                <Grid Margin="0,0,0,15">
+                    <TextBlock Text="MFT" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding MFT}"/>
+                </Grid>
+                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+
+                <Grid Margin="0,0,0,15">
+                    <TextBlock Text="CDB" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding CDB}"/>
+                </Grid>
+                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+
+                <Grid Margin="0,0,0,15">
+                    <TextBlock Text="VBS3" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding VBS3}"/>
+                </Grid>
+                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+
+                <Grid Margin="0,0,0,15">
+                    <TextBlock Text="VBS4" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding VBS4}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

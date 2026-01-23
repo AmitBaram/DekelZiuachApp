@@ -1,0 +1,221 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Colors -->
+    <Color x:Key="PrimaryBlueColor">#2563EB</Color>
+    <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlueColor}"/>
+    <SolidColorBrush x:Key="LightBlueBrush" Color="#EEF2FF"/>
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="White"/>
+    <SolidColorBrush x:Key="SecondaryTextBrush" Color="#6B7280"/>
+    <SolidColorBrush x:Key="PrimaryTextBrush" Color="#111827"/>
+    <SolidColorBrush x:Key="BorderColorBrush" Color="#F3F4F6"/>
+
+    <!-- Card Style -->
+    <Style x:Key="CardStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.05"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Toggle Switch Style (for CheckBox) -->
+    <Style x:Key="ToggleSwitchStyle" TargetType="CheckBox">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Grid x:Name="BackgroundGrid" Width="44" Height="24">
+                                <Border x:Name="BackgroundBorder" 
+                                        Background="#E5E7EB" 
+                                        CornerRadius="12" 
+                                        VerticalAlignment="Center" 
+                                        Height="24"/>
+                                <Ellipse x:Name="Dot" 
+                                         Fill="White" 
+                                         Width="18" Height="18" 
+                                         HorizontalAlignment="Left" 
+                                         Margin="3,0,0,0">
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform X="0"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Grid>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True"/>
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Dot" 
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" 
+                                                         To="20" Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Dot" 
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" 
+                                                         To="0" Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Sidebar Button Style -->
+    <Style x:Key="SidebarItemStyle" TargetType="RadioButton">
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}"/>
+        <Setter Property="Margin" Value="10,2,10,2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#F9FAFB"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Header Text Block -->
+    <Style x:Key="PageHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+        <Setter Property="Margin" Value="0,0,0,4"/>
+    </Style>
+
+    <Style x:Key="PageSubHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}"/>
+        <Setter Property="Margin" Value="0,0,0,24"/>
+    </Style>
+
+    <!-- Numbered Circle Badge -->
+    <Style x:Key="CircleBadgeStyle" TargetType="Border">
+        <Setter Property="Width" Value="28"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="CornerRadius" Value="14"/>
+        <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Trash Button Style -->
+    <Style x:Key="TrashButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}">
+                        <Path Data="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" 
+                              Fill="#F87171" 
+                              Stretch="Uniform" 
+                              Margin="4"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FEE2E2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Pill TextBox Style -->
+    <Style x:Key="PillTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#E5E7EB"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Name="Border" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            CornerRadius="8">
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="0" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                            <Setter Property="BorderThickness" Value="1.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Status Box Style for Formats -->
+    <Style x:Key="StatusBoxStyle" TargetType="Border">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#F3F4F6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="100"/>
+        <Setter Property="Margin" Value="0,0,15,0"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.05"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Content Card -->
+    <Style x:Key="ContentCardStyle" TargetType="Border">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Padding" Value="40"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#F1F5F9"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.03"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

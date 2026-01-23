@@ -1,0 +1,59 @@
+<UserControl x:Class="DekelApp.Views.GeneralInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Margin="0,0,0,30">
+            <StackPanel HorizontalAlignment="Right">
+                <TextBlock Text="מידע כללי" FontSize="28" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}" HorizontalAlignment="Right"/>
+                <TextBlock Text="הזן את פרטי היחידה והמבצע לניהול הדיווח." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Card Content -->
+        <Border Grid.Row="1" Style="{StaticResource ContentCardStyle}">
+            <StackPanel>
+                <TextBlock Text="פרטי המבצע" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}" HorizontalAlignment="Right" Margin="0,0,0,30"/>
+                
+                <Grid Margin="0,0,0,25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Row 1: Left Column (Operation Name) -->
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="שם המבצע" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
+                        <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding OperationName, UpdateSourceTrigger=PropertyChanged}" Height="45" FlowDirection="RightToLeft"/>
+                    </StackPanel>
+
+                    <!-- Row 1: Right Column (Unit Name) -->
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="שם היחידה" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
+                        <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding UnitName, UpdateSourceTrigger=PropertyChanged}" Height="45" FlowDirection="RightToLeft"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Width="350" HorizontalAlignment="Right" Margin="0,0,0,25">
+                    <TextBlock Text="תאריך" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
+                    <DatePicker SelectedDate="{Binding Date}" Height="45" VerticalContentAlignment="Center" FlowDirection="RightToLeft"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="הערות נוספות" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
+                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding GeneralNotes, UpdateSourceTrigger=PropertyChanged}" Height="150" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="15" FlowDirection="RightToLeft"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

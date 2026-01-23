@@ -1,0 +1,115 @@
+﻿<Window x:Class="DekelApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DekelApp.ViewModels"
+        xmlns:views="clr-namespace:DekelApp.Views"
+        mc:Ignorable="d"
+        Title="Dekel Application" Height="750" Width="1150"
+        MinWidth="900" MinHeight="600"
+        Background="#F8FAFC">
+    <Window.Resources>
+        <!-- DataTemplates -->
+        <DataTemplate DataType="{x:Type vm:LayersViewModel}"><views:LayersView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FormatsViewModel}"><views:FormatsView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TichumViewModel}"><views:TichumView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MikudViewModel}"><views:MikudView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:YeadimViewModel}"><views:YeadimView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:GeneralInfoViewModel}"><views:GeneralInfoView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FinishViewModel}"><views:FinishView /></DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="White" BorderBrush="#F1F5F9" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo/Title -->
+                <StackPanel Grid.Row="0" Margin="30,40,30,30">
+                    <TextBlock Text="המצייח" FontSize="26" FontWeight="Bold" Foreground="#1E293B"/>
+                    <TextBlock Text="תוכנה לציוד מבצעי" FontSize="12" Foreground="#64748B"/>
+                </StackPanel>
+
+                <!-- Navigation List -->
+                <StackPanel Grid.Row="1">
+                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateGeneralInfoCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:GeneralInfoViewModel}}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path x:Name="SidebarIconElement" Data="{StaticResource IconGeneral}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                            <TextBlock Text="מידע כללי" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateLayersCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:LayersViewModel}}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconLayers}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                            <TextBlock Text="שכבות" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateFormatsCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:FormatsViewModel}}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconFormats}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                            <TextBlock Text="פורמטים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateTichumCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumViewModel}}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconTichum}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                            <TextBlock Text="תיחום" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateMikudCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:MikudViewModel}}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconMikud}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                            <TextBlock Text="מיקוד" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateYeadimCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:YeadimViewModel}}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconYeadim}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                            <TextBlock Text="יעדים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <!-- Footer section with different background -->
+                <Border Grid.Row="2" Background="#F8FAFC" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
+                    <Button Content="סיום והפקה" 
+                            Command="{Binding NavigateFinishCommand}"
+                            Margin="25,30,25,35" 
+                            Height="60" 
+                            Background="{StaticResource PrimaryBlueBrush}" 
+                            Foreground="White" 
+                            FontSize="17"
+                            FontWeight="Bold" 
+                            BorderThickness="0">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="12"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Main Content wrapped in ScrollViewer for resizing -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ContentControl Content="{Binding Navigation.CurrentViewModel}" Margin="40,30,40,30"/>
+        </ScrollViewer>
+    </Grid>
+</Window>
