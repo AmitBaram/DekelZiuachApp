@@ -57,3 +57,4 @@ TestResults.xml
 # Artifacts/logs
 logs/
 publish/
+PublishAllDotNet/
