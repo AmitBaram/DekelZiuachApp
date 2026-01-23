@@ -6,9 +6,9 @@
         xmlns:vm="clr-namespace:DekelApp.ViewModels"
         xmlns:views="clr-namespace:DekelApp.Views"
         mc:Ignorable="d"
-        Title="Dekel Application" Height="750" Width="1150"
-        MinWidth="900" MinHeight="600"
-        WindowStartupLocation="Manual" Top="80" Left="100"
+        Title="Dekel Application" Height="650" Width="1100"
+        MinWidth="900" MinHeight="550"
+        WindowStartupLocation="Manual" Top="20" Left="50"
         Background="#F8FAFC">
     <Window.Resources>
         <!-- DataTemplates -->
