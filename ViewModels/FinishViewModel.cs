@@ -46,13 +46,22 @@ namespace DekelApp.ViewModels
                         await _fileService.SaveAsync(_appData, jsonFilePath);
 
                         // Copy uploaded files to respective subfolders
-                        if (_appData.IsTichumFileUploaded && !string.IsNullOrEmpty(_appData.TichumFilePath))
+                        if (_appData.Tichum.IsFileUploaded && !string.IsNullOrEmpty(_appData.Tichum.FilePath))
                         {
-                            await _fileService.CopyShapefileAsync(_appData.TichumFilePath, tichumExportPath);
+                            await _fileService.CopyShapefileAsync(_appData.Tichum.FilePath, tichumExportPath);
                         }
-                        if (_appData.IsMikudFileUploaded && !string.IsNullOrEmpty(_appData.MikudFilePath))
+                        
+                        // Copy Mikud files for each area
+                        for (int i = 0; i < _appData.MikudAreas.Count; i++)
                         {
-                            await _fileService.CopyShapefileAsync(_appData.MikudFilePath, mikudExportPath);
+                            var area = _appData.MikudAreas[i];
+                            if (area.IsFileUploaded && !string.IsNullOrEmpty(area.FilePath))
+                            {
+                                // Sanitize name for folder (replace spaces/illegal chars)
+                                string sanitizedName = string.Join("_", area.Name.Split(Path.GetInvalidFileNameChars()));
+                                var areaPath = Path.Combine(mikudExportPath, sanitizedName);
+                                await _fileService.CopyShapefileAsync(area.FilePath, areaPath);
+                            }
                         }
 
                         MessageBox.Show($"Data saved successfully to {exportPath}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);

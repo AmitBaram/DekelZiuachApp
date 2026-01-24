@@ -72,7 +72,6 @@ namespace DekelApp.Models
             }
         }
 
-        // Validation Logic
         [JsonIgnore]
         public bool IsEastingValid => !string.IsNullOrWhiteSpace(Easting) && double.TryParse(Easting, out double e) && e >= 100000 && e <= 900000;
         [JsonIgnore]
@@ -93,6 +92,57 @@ namespace DekelApp.Models
         public Brush NorthingStatusColor => IsNorthingValid ? Brushes.Blue : Brushes.Red;
         [JsonIgnore]
         public Brush ZoneStatusColor => IsZoneValid ? Brushes.Blue : Brushes.Red;
+    }
+
+    public class TichumModel : ObservableObject
+    {
+        private string? _filePath;
+        private bool _isFileUploaded;
+
+        public LayerModel Layers { get; set; } = new();
+        public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
+
+        public string? FilePath
+        {
+            get => _filePath;
+            set => SetProperty(ref _filePath, value);
+        }
+
+        [JsonIgnore]
+        public bool IsFileUploaded
+        {
+            get => _isFileUploaded;
+            set => SetProperty(ref _isFileUploaded, value);
+        }
+    }
+
+    public class MikudAreaModel : ObservableObject
+    {
+        private bool _isFileUploaded;
+        private string? _filePath;
+        private string _name = string.Empty;
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
+        public LayerModel Layers { get; set; } = new();
+
+        public string? FilePath
+        {
+            get => _filePath;
+            set => SetProperty(ref _filePath, value);
+        }
+
+        [JsonIgnore]
+        public bool IsFileUploaded
+        {
+            get => _isFileUploaded;
+            set => SetProperty(ref _isFileUploaded, value);
+        }
     }
 
     public class YeadimTargetModel : ObservableObject
@@ -150,7 +200,6 @@ namespace DekelApp.Models
             }
         }
 
-        // Validation Logic
         [JsonIgnore]
         public bool IsEastingValid => !string.IsNullOrWhiteSpace(Easting) && double.TryParse(Easting, out double e) && e >= 100000 && e <= 900000;
         [JsonIgnore]
@@ -183,15 +232,12 @@ namespace DekelApp.Models
 
     public class AppData
     {
-        public LayerModel Layers { get; set; } = new();
-        public FormatModel Formats { get; set; } = new();
-        public ObservableCollection<CoordinateModel> TichumCoordinates { get; set; } = new();
-        public ObservableCollection<CoordinateModel> MikudCoordinates { get; set; } = new();
-        public bool IsTichumFileUploaded { get; set; }
-        public bool IsMikudFileUploaded { get; set; }
-        public string? TichumFilePath { get; set; }
-        public string? MikudFilePath { get; set; }
-        public ObservableCollection<YeadimTargetModel> YeadimTargets { get; set; } = new();
         public GeneralInfoModel GeneralInfo { get; set; } = new();
+        public FormatModel Formats { get; set; } = new();
+        public TichumModel Tichum { get; set; } = new();
+        [JsonPropertyName("Mikud")]
+        public ObservableCollection<MikudAreaModel> MikudAreas { get; set; } = new();
+        [JsonPropertyName("Yeadim")]
+        public ObservableCollection<YeadimTargetModel> YeadimTargets { get; set; } = new();
     }
 }

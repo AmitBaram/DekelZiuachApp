@@ -6,13 +6,14 @@
         xmlns:vm="clr-namespace:DekelApp.ViewModels"
         xmlns:views="clr-namespace:DekelApp.Views"
         mc:Ignorable="d"
-        Title="Dekel Application" Height="650" Width="1100"
-        MinWidth="900" MinHeight="550"
+        Title="Dekel Application" Height="720" Width="1150"
+        MinWidth="950" MinHeight="600"
         WindowStartupLocation="Manual" Top="20" Left="50"
         Background="#F8FAFC">
     <Window.Resources>
         <!-- DataTemplates -->
-        <DataTemplate DataType="{x:Type vm:LayersViewModel}"><views:LayersView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TichumLayersViewModel}"><views:TichumLayersView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MikudLayersViewModel}"><views:MikudLayersView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:FormatsViewModel}"><views:FormatsView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:TichumViewModel}"><views:TichumView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:MikudViewModel}"><views:MikudView /></DataTemplate>
@@ -43,49 +44,58 @@
                 </StackPanel>
 
                 <!-- Navigation List -->
-                <StackPanel Grid.Row="1">
-                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateGeneralInfoCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:GeneralInfoViewModel}}">
-                        <StackPanel Orientation="Horizontal">
-                            <Path x:Name="SidebarIconElement" Data="{StaticResource IconGeneral}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
-                            <TextBlock Text="מידע כללי" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                        </StackPanel>
-                    </RadioButton>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel>
+                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateGeneralInfoCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:GeneralInfoViewModel}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path x:Name="SidebarIconElement" Data="{StaticResource IconGeneral}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="מידע כללי" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateLayersCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:LayersViewModel}}">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource IconLayers}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
-                            <TextBlock Text="שכבות" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                        </StackPanel>
-                    </RadioButton>
+                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateFormatsCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:FormatsViewModel}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconFormats}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="פורמטים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateFormatsCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:FormatsViewModel}}">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource IconFormats}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
-                            <TextBlock Text="פורמטים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                        </StackPanel>
-                    </RadioButton>
+                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateTichumCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumViewModel}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconTichum}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="תיחום" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateTichumCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumViewModel}}">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource IconTichum}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
-                            <TextBlock Text="תיחום" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                        </StackPanel>
-                    </RadioButton>
+                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateMikudCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:MikudViewModel}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconMikud}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="מיקוד" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateMikudCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:MikudViewModel}}">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource IconMikud}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
-                            <TextBlock Text="מיקוד" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                        </StackPanel>
-                    </RadioButton>
+                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateTichumLayersCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumLayersViewModel}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconLayers}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="שכבות תיחום" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateYeadimCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:YeadimViewModel}}">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource IconYeadim}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
-                            <TextBlock Text="יעדים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                        </StackPanel>
-                    </RadioButton>
-                </StackPanel>
+                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateMikudLayersCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:MikudLayersViewModel}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconLayers}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="שכבות מיקוד" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateYeadimCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:YeadimViewModel}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconYeadim}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="יעדים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </ScrollViewer>
 
                 <!-- Footer section with different background -->
                 <Border Grid.Row="2" Background="#F8FAFC" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">

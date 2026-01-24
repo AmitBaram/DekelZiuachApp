@@ -9,47 +9,54 @@ namespace DekelApp.Services
         {
             errorMessage = string.Empty;
 
-            // 0. At least one layer must be selected
-            var l = appData.Layers;
-            if (!l.Orthophoto && !l.DTM && !l.Buildings && !l.Fences && !l.Roads && !l.Vegetation && !l.PowerLines)
+            // 0. At least one layer must be selected in both Tichum and Mikud
+            var tl = appData.Tichum.Layers;
+            if (!tl.Orthophoto && !tl.DTM && !tl.Buildings && !tl.Fences && !tl.Roads && !tl.Vegetation && !tl.PowerLines)
             {
-                errorMessage = "At least one layer must be selected in the Layers page.";
+                errorMessage = "At least one layer must be selected in the Tichum Layers page.";
                 return false;
             }
 
             // 1. Tichum validation: File uploaded OR at least 3 valid coordinates
-            int validTichumCount = appData.TichumCoordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
-            if (!appData.IsTichumFileUploaded && validTichumCount < 3)
+            int validTichumCount = appData.Tichum.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+            if (!appData.Tichum.IsFileUploaded && validTichumCount < 3)
             {
                 errorMessage = "Tichum must have either an uploaded file or at least 3 valid coordinates.";
                 return false;
             }
 
-            // 2. Mikud validation: Empty OR File uploaded OR at least 3 valid coordinates
-            bool isMikudEmpty = appData.MikudCoordinates.Count == 0;
-            int validMikudCount = appData.MikudCoordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
-            if (!isMikudEmpty && !appData.IsMikudFileUploaded && validMikudCount < 3)
+            // 2. Mikud validation: Each area must have coordinates/file AND at least one layer
+            if (!appData.MikudAreas.Any())
             {
-                errorMessage = "Mikud must be either empty, have an uploaded file, or at least 3 valid coordinates.";
+                errorMessage = "At least one Mikud area must be defined.";
                 return false;
             }
 
-            // 3. All filled UTM coordinates in Tichum and Mikud must be valid (if they exist)
-            foreach (var coord in appData.TichumCoordinates)
+            foreach (var area in appData.MikudAreas)
             {
-                if (!coord.IsEastingValid || !coord.IsNorthingValid || !coord.IsZoneValid)
+                bool isFileUploaded = area.IsFileUploaded;
+                int validCount = area.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+                
+                if (!isFileUploaded && validCount < 3)
                 {
-                    errorMessage = "All entered coordinates in Tichum must be valid.";
+                    errorMessage = $"Mikud area '{area.Name}' must have either an uploaded file or at least 3 valid coordinates.";
                     return false;
                 }
-            }
 
-            foreach (var coord in appData.MikudCoordinates)
-            {
-                if (!coord.IsEastingValid || !coord.IsNorthingValid || !coord.IsZoneValid)
+                var ml = area.Layers;
+                if (!ml.Orthophoto && !ml.DTM && !ml.Buildings && !ml.Fences && !ml.Roads && !ml.Vegetation && !ml.PowerLines)
                 {
-                    errorMessage = "All entered coordinates in Mikud must be valid.";
+                    errorMessage = $"At least one layer must be selected for Mikud area '{area.Name}'.";
                     return false;
+                }
+
+                foreach (var coord in area.Coordinates)
+                {
+                    if (!coord.IsEastingValid || !coord.IsNorthingValid || !coord.IsZoneValid)
+                    {
+                        errorMessage = $"All entered coordinates in Mikud area '{area.Name}' must be valid.";
+                        return false;
+                    }
                 }
             }
 

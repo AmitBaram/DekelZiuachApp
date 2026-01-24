@@ -2,7 +2,7 @@ using DekelApp.Models;
 
 namespace DekelApp.ViewModels
 {
-    public class LayersViewModel : BaseViewModel
+    public class TichumLayersViewModel : BaseViewModel
     {
         private readonly LayerModel _layers;
 
@@ -42,7 +42,13 @@ namespace DekelApp.ViewModels
             set { if (_layers.Vegetation != value) { _layers.Vegetation = value; OnPropertyChanged(); } }
         }
 
-        public LayersViewModel(LayerModel layers)
+        public bool PowerLines
+        {
+            get => _layers.PowerLines;
+            set { if (_layers.PowerLines != value) { _layers.PowerLines = value; OnPropertyChanged(); } }
+        }
+
+        public TichumLayersViewModel(LayerModel layers)
         {
             _layers = layers;
         }

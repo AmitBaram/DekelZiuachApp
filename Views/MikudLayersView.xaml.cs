@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace DekelApp.Views
 {
-    public partial class LayersView : UserControl
+    public partial class MikudLayersView : UserControl
     {
-        public LayersView()
+        public MikudLayersView()
         {
             InitializeComponent();
         }

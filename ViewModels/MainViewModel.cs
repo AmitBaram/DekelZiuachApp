@@ -12,7 +12,8 @@ namespace DekelApp.ViewModels
 
         public INavigationService Navigation => _navigationService;
 
-        public ICommand NavigateLayersCommand { get; }
+        public ICommand NavigateTichumLayersCommand { get; }
+        public ICommand NavigateMikudLayersCommand { get; }
         public ICommand NavigateFormatsCommand { get; }
         public ICommand NavigateTichumCommand { get; }
         public ICommand NavigateMikudCommand { get; }
@@ -25,7 +26,8 @@ namespace DekelApp.ViewModels
             _navigationService = navigationService;
             _appData = appData;
 
-            NavigateLayersCommand = new RelayCommand(_ => _navigationService.NavigateTo<LayersViewModel>());
+            NavigateTichumLayersCommand = new RelayCommand(_ => _navigationService.NavigateTo<TichumLayersViewModel>());
+            NavigateMikudLayersCommand = new RelayCommand(_ => _navigationService.NavigateTo<MikudLayersViewModel>());
             NavigateFormatsCommand = new RelayCommand(_ => _navigationService.NavigateTo<FormatsViewModel>());
             NavigateTichumCommand = new RelayCommand(_ => _navigationService.NavigateTo<TichumViewModel>());
             NavigateMikudCommand = new RelayCommand(_ => _navigationService.NavigateTo<MikudViewModel>());
@@ -34,7 +36,7 @@ namespace DekelApp.ViewModels
             NavigateFinishCommand = new RelayCommand(_ => _navigationService.NavigateTo<FinishViewModel>());
 
             // Set initial page
-            _navigationService.NavigateTo<LayersViewModel>();
+            _navigationService.NavigateTo<GeneralInfoViewModel>();
         }
     }
 }

@@ -1,4 +1,4 @@
-<UserControl x:Class="DekelApp.Views.LayersView"
+<UserControl x:Class="DekelApp.Views.TichumLayersView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,8 +14,8 @@
         <!-- Header -->
         <Border Grid.Row="0" Margin="0,0,0,30">
             <StackPanel>
-                <TextBlock Text="Layers" FontSize="28" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                <TextBlock Text="The layers you want in your base map." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                <TextBlock Text="שכבות תיחום" FontSize="28" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                <TextBlock Text="בחר את השכבות עבור תיחום המפה" FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
             </StackPanel>
         </Border>
 

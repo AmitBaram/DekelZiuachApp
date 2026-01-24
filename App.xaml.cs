@@ -25,7 +25,8 @@ namespace DekelApp
 
             // ViewModels
             services.AddSingleton<MainViewModel>();
-            services.AddTransient<LayersViewModel>(s => new LayersViewModel(s.GetRequiredService<AppData>().Layers));
+            services.AddTransient<TichumLayersViewModel>(s => new TichumLayersViewModel(s.GetRequiredService<AppData>().Tichum.Layers));
+            services.AddTransient<MikudLayersViewModel>(s => new MikudLayersViewModel(s.GetRequiredService<AppData>()));
             services.AddTransient<FormatsViewModel>(s => new FormatsViewModel(s.GetRequiredService<AppData>().Formats));
             services.AddTransient<TichumViewModel>(s => new TichumViewModel(s.GetRequiredService<AppData>()));
             services.AddTransient<MikudViewModel>(s => new MikudViewModel(s.GetRequiredService<AppData>()));
@@ -35,7 +36,11 @@ namespace DekelApp
 
             // Navigation Factory
             services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider => 
-                viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
+                viewModelType => {
+                    var vm = (BaseViewModel)serviceProvider.GetRequiredService(viewModelType);
+                    if (vm is GeneralInfoViewModel) { /* just testing */ }
+                    return vm;
+                });
 
             _serviceProvider = services.BuildServiceProvider();
         }

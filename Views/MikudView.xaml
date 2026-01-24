@@ -3,95 +3,156 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:DekelApp.Utils.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <conv:AddOneConverter x:Key="LocalAddOneConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Title and Stats -->
+        <!-- Header -->
         <Grid Grid.Row="0" Margin="0,0,0,30">
             <StackPanel Orientation="Horizontal">
                 <Border Width="45" Height="45" Background="{StaticResource LightBlueBrush}" CornerRadius="12" Margin="0,0,15,0">
                     <Path Data="{StaticResource IconMikud}" Fill="{StaticResource PrimaryBlueBrush}" Stretch="Uniform" Margin="12"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="Mikud" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <TextBlock Text="Set your coordinates for focus areas." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                    <TextBlock Text="Mikud Areas" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <TextBlock Text="Manage your focus areas." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
                 </StackPanel>
             </StackPanel>
-            
-            <Button Content="Upload File" Command="{Binding UploadFileCommand}" 
-                    HorizontalAlignment="Right" VerticalAlignment="Center" Padding="20,10" 
-                    Background="{StaticResource LightBlueBrush}" Foreground="{StaticResource PrimaryBlueBrush}" 
-                    BorderBrush="{StaticResource PrimaryBlueBrush}" BorderThickness="1" FontWeight="SemiBold">
-                <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="8"/></Style></Button.Resources>
-            </Button>
         </Grid>
 
-        <!-- Main Card Content -->
-        <Border Grid.Row="1" Style="{StaticResource ContentCardStyle}">
-            <StackPanel>
-                <!-- List of Items -->
-                <ItemsControl ItemsSource="{Binding Coordinates}" AlternationCount="1000">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,0,0,45">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <!-- List View -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Visibility="{Binding IsListView, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding MikudAreas}" AlternationCount="1000">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource ContentCardStyle}" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <Border Style="{StaticResource CircleBadgeStyle}" Width="40" Height="40" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource LocalAddOneConverter}}" 
+                                                       FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
 
-                                <Border Style="{StaticResource CircleBadgeStyle}" Grid.Column="0">
-                                    <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource AddOneConverter}}" 
-                                               FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" Margin="20,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Coordinates.Count, StringFormat='{}Area with {0} coordinates'}" FontWeight="SemiBold" FontSize="16"/>
+                                            <TextBlock Text="{Binding FilePath, TargetNullValue='No file uploaded'}" Foreground="{StaticResource SecondaryTextBrush}" FontSize="13"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <Button Content="Edit" Command="{Binding DataContext.EditAreaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,10,0" Padding="15,5"/>
+                                            <Button Style="{StaticResource TrashButtonStyle}" Command="{Binding DataContext.DeleteAreaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Width="36" Height="36"/>
+                                        </StackPanel>
+                                    </Grid>
                                 </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                                <StackPanel Grid.Column="1" Margin="20,0,10,0">
-                                    <TextBlock Text="X Coordinate" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
-                                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Easting, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
-                                    <TextBlock Text="{Binding EastingStatusText}" Foreground="{Binding EastingStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
+                    <Button Command="{Binding AddNewAreaCommand}" 
+                            Height="55" Background="{StaticResource PrimaryBlueBrush}" Foreground="White" 
+                            FontSize="16" FontWeight="Bold" BorderThickness="0" Margin="0,10,0,0">
+                        <Button.Resources>
+                            <Style TargetType="Border"><Setter Property="CornerRadius" Value="12"/></Style>
+                        </Button.Resources>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="+" FontSize="22" Margin="0,0,10,0"/>
+                            <TextBlock Text="Add New Mikud Area" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Editor View -->
+            <Border Style="{StaticResource ContentCardStyle}" Visibility="{Binding IsEditingArea, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Area Name:" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding CurrentArea.Name, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="40" FontSize="15" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <Button Content="Upload File" Command="{Binding UploadFileCommand}" HorizontalAlignment="Right" Padding="15,7" Style="{StaticResource SecondaryButtonStyle}"/>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding CurrentArea.Coordinates}" AlternationCount="1000">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,25">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="40"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Style="{StaticResource CircleBadgeStyle}" Width="30" Height="30" Grid.Column="0" VerticalAlignment="Top" Margin="0,10,0,0">
+                                                <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource LocalAddOneConverter}}" 
+                                                           FontSize="12" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <StackPanel Grid.Column="1" Margin="15,0,5,0">
+                                                <TextBlock Text="X" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource SecondaryTextBrush}" Margin="5,0,0,5"/>
+                                                <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Easting, UpdateSourceTrigger=PropertyChanged}" Height="38"/>
+                                                <TextBlock Text="{Binding EastingStatusText}" Foreground="{Binding EastingStatusColor}" FontSize="9" Margin="5,2,0,0" TextWrapping="Wrap"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2" Margin="5,0,5,0">
+                                                <TextBlock Text="Y" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource SecondaryTextBrush}" Margin="5,0,0,5"/>
+                                                <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Northing, UpdateSourceTrigger=PropertyChanged}" Height="38"/>
+                                                <TextBlock Text="{Binding NorthingStatusText}" Foreground="{Binding NorthingStatusColor}" FontSize="9" Margin="5,2,0,0" TextWrapping="Wrap"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="3" Margin="5,0,10,0">
+                                                <TextBlock Text="Zone" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource SecondaryTextBrush}" Margin="5,0,0,5"/>
+                                                <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Zone, UpdateSourceTrigger=PropertyChanged}" Height="38"/>
+                                                <TextBlock Text="{Binding ZoneStatusText}" Foreground="{Binding ZoneStatusColor}" FontSize="9" Margin="5,2,0,0" TextWrapping="Wrap"/>
+                                            </StackPanel>
+
+                                            <Button Grid.Column="4" Style="{StaticResource TrashButtonStyle}" Command="{Binding DataContext.DeleteCoordinateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" VerticalAlignment="Bottom" Width="32" Height="32" Margin="0,0,0,3"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Command="{Binding AddCoordinateCommand}" Style="{StaticResource SecondaryButtonStyle}" Height="45" Margin="0,10,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="+" FontSize="18" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Add Coordinate"/>
                                 </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
 
-                                <StackPanel Grid.Column="2" Margin="10,0,10,0">
-                                    <TextBlock Text="Y Coordinate" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
-                                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Northing, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
-                                    <TextBlock Text="{Binding NorthingStatusText}" Foreground="{Binding NorthingStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="3" Margin="10,0,20,0">
-                                    <TextBlock Text="Zone" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
-                                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Zone, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
-                                    <TextBlock Text="{Binding ZoneStatusText}" Foreground="{Binding ZoneStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
-                                </StackPanel>
-
-                                <Button Grid.Column="4" Style="{StaticResource TrashButtonStyle}" 
-                                        Command="{Binding DataContext.DeleteCoordinateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                        CommandParameter="{Binding}"
-                                        VerticalAlignment="Bottom" Margin="0,0,0,5" Width="36" Height="36"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <!-- Add Button Nested After List -->
-                <Button Command="{Binding AddCoordinateCommand}" 
-                        Height="55" Background="{StaticResource PrimaryBlueBrush}" Foreground="White" 
-                        FontSize="16" FontWeight="Bold" BorderThickness="0" Margin="0,10,0,0">
-                    <Button.Resources>
-                        <Style TargetType="Border"><Setter Property="CornerRadius" Value="12"/></Style>
-                    </Button.Resources>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="+" FontSize="22" Margin="0,0,10,0"/>
-                        <TextBlock Text="Add New Coordinate" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-        </Border>
+                    <Button Grid.Row="2" Content="Mikud is Done" Command="{Binding FinishAreaCommand}" Height="50" Background="{StaticResource PrimaryBlueBrush}" Foreground="White" FontWeight="Bold" FontSize="15" Margin="0,20,0,0">
+                        <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="10"/></Style></Button.Resources>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
