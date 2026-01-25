@@ -38,13 +38,49 @@ namespace DekelApp.ViewModels
         public ICommand AddCoordinateCommand { get; }
         public ICommand DeleteCoordinateCommand { get; }
         public ICommand UploadFileCommand { get; }
+        public ICommand ToggleToUTMCommand { get; }
+        public ICommand ToggleToGeographicCommand { get; }
+
+        public CoordinateSystemType CoordinateSystem
+        {
+            get => CurrentArea?.CoordinateSystem ?? CoordinateSystemType.UTM;
+            set
+            {
+                if (CurrentArea != null && CurrentArea.CoordinateSystem != value)
+                {
+                    CurrentArea.CoordinateSystem = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsUTM));
+                    OnPropertyChanged(nameof(IsGeographic));
+                }
+            }
+        }
+
+        public bool IsUTM => CoordinateSystem == CoordinateSystemType.UTM;
+        public bool IsGeographic => CoordinateSystem == CoordinateSystemType.Geographic;
 
         public MikudViewModel(AppData appData)
         {
             _appData = appData;
 
             // Cleanup invalid areas (less than 3 coords AND no file) that might have been left over from previous navigation
-            var invalidAreas = MikudAreas.Where(area => !area.IsFileUploaded && area.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid) < 3).ToList();
+            var invalidAreas = MikudAreas.Where(area =>
+            {
+                if (area.IsFileUploaded) return false;
+                
+                int validCount;
+                if (area.CoordinateSystem == CoordinateSystemType.UTM)
+                {
+                    validCount = area.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+                }
+                else
+                {
+                    validCount = area.Coordinates.Count(c => c.IsLatitudeValid && c.IsLongitudeValid);
+                }
+                
+                return validCount < 3;
+            }).ToList();
+            
             foreach (var area in invalidAreas)
             {
                 MikudAreas.Remove(area);
@@ -58,6 +94,8 @@ namespace DekelApp.ViewModels
             AddCoordinateCommand = new RelayCommand(_ => AddCoordinate());
             DeleteCoordinateCommand = new RelayCommand(coord => DeleteCoordinate(coord));
             UploadFileCommand = new RelayCommand(_ => UploadFile());
+            ToggleToUTMCommand = new RelayCommand(_ => CoordinateSystem = CoordinateSystemType.UTM);
+            ToggleToGeographicCommand = new RelayCommand(_ => CoordinateSystem = CoordinateSystemType.Geographic);
         }
 
         private void AddNewArea()
@@ -92,7 +130,16 @@ namespace DekelApp.ViewModels
             if (CurrentArea == null) return;
 
             bool isFileUploaded = CurrentArea.IsFileUploaded;
-            int validCount = CurrentArea.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+            int validCount;
+            
+            if (CurrentArea.CoordinateSystem == CoordinateSystemType.UTM)
+            {
+                validCount = CurrentArea.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+            }
+            else
+            {
+                validCount = CurrentArea.Coordinates.Count(c => c.IsLatitudeValid && c.IsLongitudeValid);
+            }
 
             if (!isFileUploaded && validCount < 3)
             {
@@ -105,7 +152,17 @@ namespace DekelApp.ViewModels
 
         private void AddCoordinate()
         {
-            CurrentArea?.Coordinates.Add(new CoordinateModel() { Easting = "0", Northing = "0", Zone = "36N" });
+            if (CurrentArea != null)
+            {
+                if (CoordinateSystem == CoordinateSystemType.UTM)
+                {
+                    CurrentArea.Coordinates.Add(new CoordinateModel() { Easting = "0", Northing = "0", Zone = "36N" });
+                }
+                else
+                {
+                    CurrentArea.Coordinates.Add(new CoordinateModel() { Latitude = "0", Longitude = "0" });
+                }
+            }
         }
 
         private void DeleteCoordinate(object? coord)

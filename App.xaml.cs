@@ -30,7 +30,7 @@ namespace DekelApp
             services.AddTransient<FormatsViewModel>(s => new FormatsViewModel(s.GetRequiredService<AppData>().Formats));
             services.AddTransient<TichumViewModel>(s => new TichumViewModel(s.GetRequiredService<AppData>()));
             services.AddTransient<MikudViewModel>(s => new MikudViewModel(s.GetRequiredService<AppData>()));
-            services.AddTransient<YeadimViewModel>(s => new YeadimViewModel(s.GetRequiredService<AppData>().YeadimTargets));
+            services.AddTransient<YeadimViewModel>(s => new YeadimViewModel(s.GetRequiredService<AppData>().YeadimTargets, s.GetRequiredService<AppData>()));
             services.AddTransient<GeneralInfoViewModel>(s => new GeneralInfoViewModel(s.GetRequiredService<AppData>().GeneralInfo));
             services.AddTransient<FinishViewModel>();
 

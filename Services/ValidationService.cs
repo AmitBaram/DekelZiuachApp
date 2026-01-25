@@ -18,7 +18,16 @@ namespace DekelApp.Services
             }
 
             // 1. Tichum validation: File uploaded OR at least 3 valid coordinates
-            int validTichumCount = appData.Tichum.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+            int validTichumCount;
+            if (appData.Tichum.CoordinateSystem == CoordinateSystemType.UTM)
+            {
+                validTichumCount = appData.Tichum.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+            }
+            else
+            {
+                validTichumCount = appData.Tichum.Coordinates.Count(c => c.IsLatitudeValid && c.IsLongitudeValid);
+            }
+
             if (!appData.Tichum.IsFileUploaded && validTichumCount < 3)
             {
                 errorMessage = "Tichum must have either an uploaded file or at least 3 valid coordinates.";
@@ -35,7 +44,16 @@ namespace DekelApp.Services
             foreach (var area in appData.MikudAreas)
             {
                 bool isFileUploaded = area.IsFileUploaded;
-                int validCount = area.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+                int validCount;
+                
+                if (area.CoordinateSystem == CoordinateSystemType.UTM)
+                {
+                    validCount = area.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
+                }
+                else
+                {
+                    validCount = area.Coordinates.Count(c => c.IsLatitudeValid && c.IsLongitudeValid);
+                }
                 
                 if (!isFileUploaded && validCount < 3)
                 {
@@ -52,7 +70,17 @@ namespace DekelApp.Services
 
                 foreach (var coord in area.Coordinates)
                 {
-                    if (!coord.IsEastingValid || !coord.IsNorthingValid || !coord.IsZoneValid)
+                    bool isValid;
+                    if (area.CoordinateSystem == CoordinateSystemType.UTM)
+                    {
+                        isValid = coord.IsEastingValid && coord.IsNorthingValid && coord.IsZoneValid;
+                    }
+                    else
+                    {
+                        isValid = coord.IsLatitudeValid && coord.IsLongitudeValid;
+                    }
+
+                    if (!isValid)
                     {
                         errorMessage = $"All entered coordinates in Mikud area '{area.Name}' must be valid.";
                         return false;
@@ -60,17 +88,38 @@ namespace DekelApp.Services
                 }
             }
 
-            // 4. All UTM coordinates in Yeadim are valid
+            // 3. All coordinates in Yeadim are valid
             foreach (var target in appData.YeadimTargets)
             {
-                if (string.IsNullOrWhiteSpace(target.Name) || string.IsNullOrWhiteSpace(target.Easting) || string.IsNullOrWhiteSpace(target.Northing) || string.IsNullOrWhiteSpace(target.Zone))
+                if (string.IsNullOrWhiteSpace(target.Name))
                 {
-                    errorMessage = "All fields in Yeadim targets must be filled.";
+                    errorMessage = "All target names in Yeadim must be filled.";
+                    return false;
+                }
+
+                bool coordsValid;
+                if (appData.YeadimCoordinateSystem == CoordinateSystemType.UTM)
+                {
+                    coordsValid = !string.IsNullOrWhiteSpace(target.Easting) && 
+                                  !string.IsNullOrWhiteSpace(target.Northing) && 
+                                  !string.IsNullOrWhiteSpace(target.Zone) &&
+                                  target.IsEastingValid && target.IsNorthingValid && target.IsZoneValid;
+                }
+                else
+                {
+                    coordsValid = !string.IsNullOrWhiteSpace(target.Latitude) && 
+                                  !string.IsNullOrWhiteSpace(target.Longitude) &&
+                                  target.IsLatitudeValid && target.IsLongitudeValid;
+                }
+
+                if (!coordsValid)
+                {
+                    errorMessage = "All coordinate fields in Yeadim targets must be filled and valid.";
                     return false;
                 }
             }
 
-            // 3. At least one format is selected
+            // 4. At least one format is selected
             var f = appData.Formats;
             if (!f.CDB && !f.MFT && !f.VBS3 && !f.VBS4)
             {
@@ -78,7 +127,7 @@ namespace DekelApp.Services
                 return false;
             }
 
-            // 4. All fields in General Info filled except General Notes
+            // 5. All fields in General Info filled except General Notes
             var gi = appData.GeneralInfo;
             if (string.IsNullOrWhiteSpace(gi.UnitName) || string.IsNullOrWhiteSpace(gi.OperationName) || gi.Date == null)
             {

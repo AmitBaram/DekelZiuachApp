@@ -5,6 +5,12 @@ using DekelApp.Utils;
 
 namespace DekelApp.Models
 {
+    public enum CoordinateSystemType
+    {
+        UTM,
+        Geographic
+    }
+
     public class LayerModel
     {
         public bool Orthophoto { get; set; } = true;
@@ -29,6 +35,8 @@ namespace DekelApp.Models
         private string? _easting;
         private string? _northing;
         private string? _zone;
+        private string? _latitude;
+        private string? _longitude;
 
         public string? Easting
         {
@@ -72,6 +80,34 @@ namespace DekelApp.Models
             }
         }
 
+        public string? Latitude
+        {
+            get => _latitude;
+            set
+            {
+                if (SetProperty(ref _latitude, value))
+                {
+                    OnPropertyChanged(nameof(IsLatitudeValid));
+                    OnPropertyChanged(nameof(LatitudeStatusText));
+                    OnPropertyChanged(nameof(LatitudeStatusColor));
+                }
+            }
+        }
+
+        public string? Longitude
+        {
+            get => _longitude;
+            set
+            {
+                if (SetProperty(ref _longitude, value))
+                {
+                    OnPropertyChanged(nameof(IsLongitudeValid));
+                    OnPropertyChanged(nameof(LongitudeStatusText));
+                    OnPropertyChanged(nameof(LongitudeStatusColor));
+                }
+            }
+        }
+
         [JsonIgnore]
         public bool IsEastingValid => !string.IsNullOrWhiteSpace(Easting) && double.TryParse(Easting, out double e) && e >= 100000 && e <= 900000;
         [JsonIgnore]
@@ -80,11 +116,20 @@ namespace DekelApp.Models
         public bool IsZoneValid => !string.IsNullOrWhiteSpace(Zone) && System.Text.RegularExpressions.Regex.IsMatch(Zone, @"^\d{1,2}[A-Z]$");
 
         [JsonIgnore]
+        public bool IsLatitudeValid => !string.IsNullOrWhiteSpace(Latitude) && double.TryParse(Latitude, out double lat) && lat >= -90 && lat <= 90;
+        [JsonIgnore]
+        public bool IsLongitudeValid => !string.IsNullOrWhiteSpace(Longitude) && double.TryParse(Longitude, out double lon) && lon >= -180 && lon <= 180;
+
+        [JsonIgnore]
         public string EastingStatusText => IsEastingValid ? "Coordinate is valid" : "Coordinate is not valid";
         [JsonIgnore]
         public string NorthingStatusText => IsNorthingValid ? "Coordinate is valid" : "Coordinate is not valid";
         [JsonIgnore]
         public string ZoneStatusText => IsZoneValid ? "Coordinate is valid" : "Coordinate is not valid";
+        [JsonIgnore]
+        public string LatitudeStatusText => IsLatitudeValid ? "Coordinate is valid" : "Coordinate is not valid";
+        [JsonIgnore]
+        public string LongitudeStatusText => IsLongitudeValid ? "Coordinate is valid" : "Coordinate is not valid";
 
         [JsonIgnore]
         public Brush EastingStatusColor => IsEastingValid ? Brushes.Blue : Brushes.Red;
@@ -92,15 +137,26 @@ namespace DekelApp.Models
         public Brush NorthingStatusColor => IsNorthingValid ? Brushes.Blue : Brushes.Red;
         [JsonIgnore]
         public Brush ZoneStatusColor => IsZoneValid ? Brushes.Blue : Brushes.Red;
+        [JsonIgnore]
+        public Brush LatitudeStatusColor => IsLatitudeValid ? Brushes.Blue : Brushes.Red;
+        [JsonIgnore]
+        public Brush LongitudeStatusColor => IsLongitudeValid ? Brushes.Blue : Brushes.Red;
     }
 
     public class TichumModel : ObservableObject
     {
         private string? _filePath;
         private bool _isFileUploaded;
+        private CoordinateSystemType _coordinateSystem = CoordinateSystemType.UTM;
 
         public LayerModel Layers { get; set; } = new();
         public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
+
+        public CoordinateSystemType CoordinateSystem
+        {
+            get => _coordinateSystem;
+            set => SetProperty(ref _coordinateSystem, value);
+        }
 
         public string? FilePath
         {
@@ -121,6 +177,7 @@ namespace DekelApp.Models
         private bool _isFileUploaded;
         private string? _filePath;
         private string _name = string.Empty;
+        private CoordinateSystemType _coordinateSystem = CoordinateSystemType.UTM;
 
         public string Name
         {
@@ -130,6 +187,12 @@ namespace DekelApp.Models
 
         public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
         public LayerModel Layers { get; set; } = new();
+
+        public CoordinateSystemType CoordinateSystem
+        {
+            get => _coordinateSystem;
+            set => SetProperty(ref _coordinateSystem, value);
+        }
 
         public string? FilePath
         {
@@ -151,6 +214,8 @@ namespace DekelApp.Models
         private string? _easting;
         private string? _northing;
         private string? _zone;
+        private string? _latitude;
+        private string? _longitude;
 
         public string? Name
         {
@@ -200,6 +265,34 @@ namespace DekelApp.Models
             }
         }
 
+        public string? Latitude
+        {
+            get => _latitude;
+            set
+            {
+                if (SetProperty(ref _latitude, value))
+                {
+                    OnPropertyChanged(nameof(IsLatitudeValid));
+                    OnPropertyChanged(nameof(LatitudeStatusText));
+                    OnPropertyChanged(nameof(LatitudeStatusColor));
+                }
+            }
+        }
+
+        public string? Longitude
+        {
+            get => _longitude;
+            set
+            {
+                if (SetProperty(ref _longitude, value))
+                {
+                    OnPropertyChanged(nameof(IsLongitudeValid));
+                    OnPropertyChanged(nameof(LongitudeStatusText));
+                    OnPropertyChanged(nameof(LongitudeStatusColor));
+                }
+            }
+        }
+
         [JsonIgnore]
         public bool IsEastingValid => !string.IsNullOrWhiteSpace(Easting) && double.TryParse(Easting, out double e) && e >= 100000 && e <= 900000;
         [JsonIgnore]
@@ -208,11 +301,20 @@ namespace DekelApp.Models
         public bool IsZoneValid => !string.IsNullOrWhiteSpace(Zone) && System.Text.RegularExpressions.Regex.IsMatch(Zone, @"^\d{1,2}[A-Z]$");
 
         [JsonIgnore]
+        public bool IsLatitudeValid => !string.IsNullOrWhiteSpace(Latitude) && double.TryParse(Latitude, out double lat) && lat >= -90 && lat <= 90;
+        [JsonIgnore]
+        public bool IsLongitudeValid => !string.IsNullOrWhiteSpace(Longitude) && double.TryParse(Longitude, out double lon) && lon >= -180 && lon <= 180;
+
+        [JsonIgnore]
         public string EastingStatusText => IsEastingValid ? "Coordinate is valid" : "Coordinate is not valid";
         [JsonIgnore]
         public string NorthingStatusText => IsNorthingValid ? "Coordinate is valid" : "Coordinate is not valid";
         [JsonIgnore]
         public string ZoneStatusText => IsZoneValid ? "Coordinate is valid" : "Coordinate is not valid";
+        [JsonIgnore]
+        public string LatitudeStatusText => IsLatitudeValid ? "Coordinate is valid" : "Coordinate is not valid";
+        [JsonIgnore]
+        public string LongitudeStatusText => IsLongitudeValid ? "Coordinate is valid" : "Coordinate is not valid";
 
         [JsonIgnore]
         public Brush EastingStatusColor => IsEastingValid ? Brushes.Blue : Brushes.Red;
@@ -220,6 +322,10 @@ namespace DekelApp.Models
         public Brush NorthingStatusColor => IsNorthingValid ? Brushes.Blue : Brushes.Red;
         [JsonIgnore]
         public Brush ZoneStatusColor => IsZoneValid ? Brushes.Blue : Brushes.Red;
+        [JsonIgnore]
+        public Brush LatitudeStatusColor => IsLatitudeValid ? Brushes.Blue : Brushes.Red;
+        [JsonIgnore]
+        public Brush LongitudeStatusColor => IsLongitudeValid ? Brushes.Blue : Brushes.Red;
     }
 
     public class GeneralInfoModel
@@ -230,8 +336,10 @@ namespace DekelApp.Models
         public string? GeneralNotes { get; set; }
     }
 
-    public class AppData
+    public class AppData : ObservableObject
     {
+        private CoordinateSystemType _yeadimCoordinateSystem = CoordinateSystemType.UTM;
+
         public GeneralInfoModel GeneralInfo { get; set; } = new();
         public FormatModel Formats { get; set; } = new();
         public TichumModel Tichum { get; set; } = new();
@@ -239,5 +347,11 @@ namespace DekelApp.Models
         public ObservableCollection<MikudAreaModel> MikudAreas { get; set; } = new();
         [JsonPropertyName("Yeadim")]
         public ObservableCollection<YeadimTargetModel> YeadimTargets { get; set; } = new();
+
+        public CoordinateSystemType YeadimCoordinateSystem
+        {
+            get => _yeadimCoordinateSystem;
+            set => SetProperty(ref _yeadimCoordinateSystem, value);
+        }
     }
 }

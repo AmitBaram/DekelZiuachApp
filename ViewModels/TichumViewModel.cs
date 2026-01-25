@@ -11,9 +11,35 @@ namespace DekelApp.ViewModels
         private readonly AppData _appData;
         public ObservableCollection<CoordinateModel> Coordinates => _appData.Tichum.Coordinates;
 
+        public CoordinateSystemType CoordinateSystem
+        {
+            get => _appData.Tichum.CoordinateSystem;
+            set
+            {
+                if (_appData.Tichum.CoordinateSystem != value)
+                {
+                    _appData.Tichum.CoordinateSystem = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsUTM));
+                    OnPropertyChanged(nameof(IsGeographic));
+                }
+            }
+        }
+
+        public bool IsUTM => CoordinateSystem == CoordinateSystemType.UTM;
+        public bool IsGeographic => CoordinateSystem == CoordinateSystemType.Geographic;
+
+        public string? UploadedFileName => _appData.Tichum.IsFileUploaded && !string.IsNullOrEmpty(_appData.Tichum.FilePath) 
+            ? System.IO.Path.GetFileName(_appData.Tichum.FilePath) 
+            : null;
+
+        public bool HasUploadedFile => _appData.Tichum.IsFileUploaded;
+
         public ICommand AddCoordinateCommand { get; }
         public ICommand DeleteCoordinateCommand { get; }
         public ICommand UploadFileCommand { get; }
+        public ICommand ToggleToUTMCommand { get; }
+        public ICommand ToggleToGeographicCommand { get; }
 
         public TichumViewModel(AppData appData)
         {
@@ -21,11 +47,20 @@ namespace DekelApp.ViewModels
             AddCoordinateCommand = new RelayCommand(_ => AddCoordinate());
             DeleteCoordinateCommand = new RelayCommand(coord => DeleteCoordinate(coord));
             UploadFileCommand = new RelayCommand(_ => UploadFile());
+            ToggleToUTMCommand = new RelayCommand(_ => CoordinateSystem = CoordinateSystemType.UTM);
+            ToggleToGeographicCommand = new RelayCommand(_ => CoordinateSystem = CoordinateSystemType.Geographic);
         }
 
         private void AddCoordinate()
         {
-            Coordinates.Add(new CoordinateModel() { Easting = "0", Northing = "0", Zone = "36N" });
+            if (CoordinateSystem == CoordinateSystemType.UTM)
+            {
+                Coordinates.Add(new CoordinateModel() { Easting = "0", Northing = "0", Zone = "36N" });
+            }
+            else
+            {
+                Coordinates.Add(new CoordinateModel() { Latitude = "0", Longitude = "0" });
+            }
         }
 
         private void DeleteCoordinate(object? coord)
@@ -48,8 +83,8 @@ namespace DekelApp.ViewModels
             {
                 _appData.Tichum.IsFileUploaded = true;
                 _appData.Tichum.FilePath = openFileDialog.FileName;
-                // In a real app, parse the file here.
-                // For now, we simulate by adding a single coordinate or showing a message.
+                OnPropertyChanged(nameof(UploadedFileName));
+                OnPropertyChanged(nameof(HasUploadedFile));
                 System.Windows.MessageBox.Show($"File '{openFileDialog.SafeFileName}' uploaded successfully.", "File Uploaded", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             }
         }

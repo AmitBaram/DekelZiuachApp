@@ -5,6 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,7 +22,7 @@
                 </Border>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="Targets" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <TextBlock Text="Add targets and their UTM coordinates" FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                    <TextBlock Text="Add targets in UTM or Geographic DD coordinates" FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -27,6 +30,63 @@
         <!-- Main Card Content -->
         <Border Grid.Row="1" Style="{StaticResource ContentCardStyle}">
             <StackPanel>
+                <!-- Coordinate System Toggle -->
+                <Grid Margin="0,0,0,20">
+                    <TextBlock Text="Coordinate System:" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="UTM" Command="{Binding ToggleToUTMCommand}" Width="80" Height="35" Margin="0,0,10,0" FontWeight="SemiBold">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsUTM}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="Geographic DD" Command="{Binding ToggleToGeographicCommand}" Width="120" Height="35" FontWeight="SemiBold">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsGeographic}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
                 <!-- List of Items -->
                 <ItemsControl ItemsSource="{Binding Targets}" AlternationCount="1000">
                     <ItemsControl.ItemTemplate>
@@ -51,22 +111,36 @@
                                     <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
                                 </StackPanel>
 
-                                 <StackPanel Grid.Column="2" Margin="10,0,10,0">
+                                <!-- UTM Fields -->
+                                <StackPanel Grid.Column="2" Margin="10,0,10,0" Visibility="{Binding DataContext.IsUTM, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVis}}">
                                     <TextBlock Text="Easting" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
                                     <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Easting, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
                                     <TextBlock Text="{Binding EastingStatusText}" Foreground="{Binding EastingStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
                                 </StackPanel>
 
-                                 <StackPanel Grid.Column="3" Margin="10,0,10,0">
+                                <StackPanel Grid.Column="3" Margin="10,0,10,0" Visibility="{Binding DataContext.IsUTM, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVis}}">
                                     <TextBlock Text="Northing" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
                                     <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Northing, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
                                     <TextBlock Text="{Binding NorthingStatusText}" Foreground="{Binding NorthingStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
                                 </StackPanel>
 
-                                 <StackPanel Grid.Column="4" Margin="10,0,20,0">
+                                <StackPanel Grid.Column="4" Margin="10,0,20,0" Visibility="{Binding DataContext.IsUTM, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVis}}">
                                     <TextBlock Text="Zone" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
                                     <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Zone, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
                                     <TextBlock Text="{Binding ZoneStatusText}" Foreground="{Binding ZoneStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
+                                </StackPanel>
+
+                                <!-- Geographic Fields -->
+                                <StackPanel Grid.Column="2" Margin="10,0,10,0" Visibility="{Binding DataContext.IsGeographic, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock Text="Latitude" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
+                                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Latitude, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
+                                    <TextBlock Text="{Binding LatitudeStatusText}" Foreground="{Binding LatitudeStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" Grid.ColumnSpan="2" Margin="10,0,20,0" Visibility="{Binding DataContext.IsGeographic, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock Text="Longitude" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
+                                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding Longitude, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
+                                    <TextBlock Text="{Binding LongitudeStatusText}" Foreground="{Binding LongitudeStatusColor}" FontSize="11" Margin="5,5,0,0" TextWrapping="Wrap"/>
                                 </StackPanel>
 
                                 <Button Grid.Column="5" Style="{StaticResource TrashButtonStyle}" 
