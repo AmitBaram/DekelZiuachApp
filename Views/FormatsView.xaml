@@ -19,8 +19,8 @@
                     <Path Data="{StaticResource IconFormats}" Fill="{StaticResource PrimaryBlueBrush}" Stretch="Uniform" Margin="12"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="Formats" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <TextBlock Text="Select the output formats for your project." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                    <TextBlock Text="פורמטים" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <TextBlock Text="תבחר את הפורמטים שאתה רוצה." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
                 </StackPanel>
             </StackPanel>
         </Border>

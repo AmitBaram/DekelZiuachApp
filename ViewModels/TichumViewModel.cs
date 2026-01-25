@@ -38,6 +38,7 @@ namespace DekelApp.ViewModels
         public ICommand AddCoordinateCommand { get; }
         public ICommand DeleteCoordinateCommand { get; }
         public ICommand UploadFileCommand { get; }
+        public ICommand RemoveFileCommand { get; }
         public ICommand ToggleToUTMCommand { get; }
         public ICommand ToggleToGeographicCommand { get; }
 
@@ -47,6 +48,7 @@ namespace DekelApp.ViewModels
             AddCoordinateCommand = new RelayCommand(_ => AddCoordinate());
             DeleteCoordinateCommand = new RelayCommand(coord => DeleteCoordinate(coord));
             UploadFileCommand = new RelayCommand(_ => UploadFile());
+            RemoveFileCommand = new RelayCommand(_ => RemoveFile());
             ToggleToUTMCommand = new RelayCommand(_ => CoordinateSystem = CoordinateSystemType.UTM);
             ToggleToGeographicCommand = new RelayCommand(_ => CoordinateSystem = CoordinateSystemType.Geographic);
         }
@@ -86,6 +88,17 @@ namespace DekelApp.ViewModels
                 OnPropertyChanged(nameof(UploadedFileName));
                 OnPropertyChanged(nameof(HasUploadedFile));
                 System.Windows.MessageBox.Show($"File '{openFileDialog.SafeFileName}' uploaded successfully.", "File Uploaded", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            }
+        }
+
+        private void RemoveFile()
+        {
+            if (System.Windows.MessageBox.Show("Are you sure you want to remove the uploaded file?", "Remove File", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes)
+            {
+                _appData.Tichum.IsFileUploaded = false;
+                _appData.Tichum.FilePath = null;
+                OnPropertyChanged(nameof(UploadedFileName));
+                OnPropertyChanged(nameof(HasUploadedFile));
             }
         }
     }

@@ -13,16 +13,16 @@
 
         <!-- Header -->
         <Border Grid.Row="0" Margin="0,0,0,30">
-            <StackPanel HorizontalAlignment="Right">
-                <TextBlock Text="מידע כללי" FontSize="28" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}" HorizontalAlignment="Right"/>
-                <TextBlock Text="הזן את פרטי היחידה והמבצע לניהול הדיווח." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
+            <StackPanel>
+                <TextBlock Text="מידע כללי" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                <TextBlock Text="הזן את פרטי היחידה והמבצע לניהול הדיווח." FontSize="14" Foreground="{DynamicResource SecondaryTextBrush}"/>
             </StackPanel>
         </Border>
 
         <!-- Main Card Content -->
         <Border Grid.Row="1" Style="{StaticResource ContentCardStyle}">
             <StackPanel>
-                <TextBlock Text="פרטי המבצע" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}" HorizontalAlignment="Right" Margin="0,0,0,30"/>
+                <TextBlock Text="פרטי המבצע" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,30"/>
                 
                 <Grid Margin="0,0,0,25">
                     <Grid.ColumnDefinitions>
@@ -31,27 +31,27 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Row 1: Left Column (Operation Name) -->
+                    <!-- Row 1: Right Column (Operation Name) - In RTL Col 0 is Right -->
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="שם המבצע" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
-                        <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding OperationName, UpdateSourceTrigger=PropertyChanged}" Height="45" FlowDirection="RightToLeft"/>
+                        <TextBlock Text="שם המבצע" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource SecondaryTextBrush}"/>
+                        <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding OperationName, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
                     </StackPanel>
 
-                    <!-- Row 1: Right Column (Unit Name) -->
+                    <!-- Row 1: Left Column (Unit Name) - In RTL Col 2 is Left -->
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="שם היחידה" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
-                        <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding UnitName, UpdateSourceTrigger=PropertyChanged}" Height="45" FlowDirection="RightToLeft"/>
+                        <TextBlock Text="שם היחידה" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource SecondaryTextBrush}"/>
+                        <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding UnitName, UpdateSourceTrigger=PropertyChanged}" Height="45"/>
                     </StackPanel>
                 </Grid>
 
-                <StackPanel Width="350" HorizontalAlignment="Right" Margin="0,0,0,25">
-                    <TextBlock Text="תאריך" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
-                    <DatePicker SelectedDate="{Binding Date}" Height="45" VerticalContentAlignment="Center" FlowDirection="RightToLeft"/>
+                <StackPanel Width="350" HorizontalAlignment="Left" Margin="0,0,0,25">
+                    <TextBlock Text="תאריך" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource SecondaryTextBrush}"/>
+                    <DatePicker SelectedDate="{Binding Date}" Height="45" VerticalContentAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel>
-                    <TextBlock Text="הערות נוספות" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Right"/>
-                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding GeneralNotes, UpdateSourceTrigger=PropertyChanged}" Height="150" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="15" FlowDirection="RightToLeft"/>
+                    <TextBlock Text="הערות נוספות" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10" Foreground="{DynamicResource SecondaryTextBrush}"/>
+                    <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding GeneralNotes, UpdateSourceTrigger=PropertyChanged}" Height="150" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="15"/>
                 </StackPanel>
             </StackPanel>
         </Border>

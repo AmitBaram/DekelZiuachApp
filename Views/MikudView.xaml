@@ -23,8 +23,8 @@
                     <Path Data="{StaticResource IconMikud}" Fill="{StaticResource PrimaryBlueBrush}" Stretch="Uniform" Margin="12"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="Mikud Areas" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <TextBlock Text="Manage your focus areas." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                    <TextBlock Text="אזורי מיקוד" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <TextBlock Text="ניהול אזורי מיקוד" FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -102,7 +102,7 @@
 
                     <Grid Grid.Row="0" Margin="0,0,0,20">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Area Name:" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="שם האזור: " FontSize="13" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding CurrentArea.Name, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="40" FontSize="15" FontWeight="SemiBold"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

@@ -23,7 +23,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
-                <TextBlock Text="Mikud Areas" FontWeight="Bold" FontSize="18" Margin="0,0,0,15"/>
+                <TextBlock Text="אזורי מיקוד" FontWeight="Bold" FontSize="18" Margin="0,0,0,15"/>
                 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
@@ -72,8 +72,8 @@
             <!-- Header -->
             <Border Grid.Row="0" Margin="0,0,0,20">
                 <StackPanel>
-                    <TextBlock Text="Mikud Layers" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <TextBlock Text="{Binding SelectedArea.Name, StringFormat='{}Available layers for: {0}', TargetNullValue='Please select an area'}" FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                    <TextBlock Text="שכבות מיקוד:" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <TextBlock Text="{Binding SelectedArea.Name, StringFormat='{}שכבות אפשריות עבור מיקוד: {0}', TargetNullValue='Please select an area'}" FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
                 </StackPanel>
             </Border>
 

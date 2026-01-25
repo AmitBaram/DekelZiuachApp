@@ -84,7 +84,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <Border Background="{TemplateBinding Background}" CornerRadius="8">
-                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,15,0">
                             <ContentPresenter VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
