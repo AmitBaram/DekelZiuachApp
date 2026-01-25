@@ -1,0 +1,18 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Light Theme Colors -->
+    <Color x:Key="PrimaryBlueColor">#2563EB</Color>
+    <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlueColor}"/>
+    
+    <SolidColorBrush x:Key="LightBlueBrush" Color="#EEF2FF"/>
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="White"/>
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#F8FAFC"/>
+    
+    <SolidColorBrush x:Key="PrimaryTextBrush" Color="#111827"/>
+    <SolidColorBrush x:Key="SecondaryTextBrush" Color="#6B7280"/>
+    
+    <SolidColorBrush x:Key="BorderColorBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="SidebarSeparationBrush" Color="#F1F5F9"/>
+    <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#F9FAFB"/>
+    <SolidColorBrush x:Key="InputBackgroundBrush" Color="White"/>
+</ResourceDictionary>
