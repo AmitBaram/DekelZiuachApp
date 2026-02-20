@@ -1,56 +1,102 @@
 using DekelApp.Models;
+using DekelApp.Utils;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System.Linq;
 
 namespace DekelApp.ViewModels
 {
     public class TichumLayersViewModel : BaseViewModel
     {
-        private readonly LayerModel _layers;
+        private readonly AppData _appData;
+        private TichumAreaModel? _selectedArea;
+        private string _newLayerName = string.Empty;
 
-        public bool Orthophoto
+        public ObservableCollection<TichumAreaModel> TichumAreas => _appData.TichumAreas;
+
+        public TichumAreaModel? SelectedArea
         {
-            get => _layers.Orthophoto;
-            set { if (_layers.Orthophoto != value) { _layers.Orthophoto = value; OnPropertyChanged(); } }
+            get => _selectedArea;
+            set
+            {
+                if (SetProperty(ref _selectedArea, value))
+                {
+                    OnPropertyChanged(nameof(HasSelection));
+                }
+            }
         }
 
-        public bool DTM
+        public bool HasSelection => SelectedArea != null;
+
+        public string NewLayerName
         {
-            get => _layers.DTM;
-            set { if (_layers.DTM != value) { _layers.DTM = value; OnPropertyChanged(); } }
+            get => _newLayerName;
+            set => SetProperty(ref _newLayerName, value);
         }
 
-        public bool Buildings
+        public ICommand ApplyToAllCommand { get; }
+        public ICommand AddCustomLayerCommand { get; }
+        public ICommand RemoveCustomLayerCommand { get; }
+
+
+        public TichumLayersViewModel(AppData appData)
         {
-            get => _layers.Buildings;
-            set { if (_layers.Buildings != value) { _layers.Buildings = value; OnPropertyChanged(); } }
+            _appData = appData;
+            ApplyToAllCommand = new RelayCommand(_ => ApplyToAll());
+            AddCustomLayerCommand = new RelayCommand(_ => AddCustomLayer());
+            RemoveCustomLayerCommand = new RelayCommand(layer => RemoveCustomLayer(layer));
+            
+            // Auto-select first area if available
+            if (TichumAreas.Any())
+            {
+                SelectedArea = TichumAreas.First();
+            }
         }
 
-        public bool Fences
+        private void ApplyToAll()
         {
-            get => _layers.Fences;
-            set { if (_layers.Fences != value) { _layers.Fences = value; OnPropertyChanged(); } }
+            if (SelectedArea == null) return;
+
+            foreach (var area in TichumAreas)
+            {
+                if (area == SelectedArea) continue;
+
+                // Sync custom layers
+                area.CustomLayers.Clear();
+                foreach (var customLayer in SelectedArea.CustomLayers)
+                {
+                    area.CustomLayers.Add(new CustomLayerModel 
+                    { 
+                        Name = customLayer.Name, 
+                        IsSelected = customLayer.IsSelected 
+                    });
+                }
+            }
+
+            System.Windows.MessageBox.Show("Settings applied to all Tichum areas.", "Success", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
         }
 
-        public bool Roads
+        private void AddCustomLayer()
         {
-            get => _layers.Roads;
-            set { if (_layers.Roads != value) { _layers.Roads = value; OnPropertyChanged(); } }
+            if (SelectedArea == null || string.IsNullOrWhiteSpace(NewLayerName)) return;
+
+            // Check if it already exists
+            if (SelectedArea.CustomLayers.Any(l => l.Name.Equals(NewLayerName.Trim(), System.StringComparison.OrdinalIgnoreCase)))
+            {
+                System.Windows.MessageBox.Show("A custom layer with this name already exists.", "Duplicate Layer", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
+
+            SelectedArea.CustomLayers.Add(new CustomLayerModel { Name = NewLayerName.Trim(), IsSelected = true });
+            NewLayerName = string.Empty;
         }
 
-        public bool Vegetation
+        private void RemoveCustomLayer(object? parameter)
         {
-            get => _layers.Vegetation;
-            set { if (_layers.Vegetation != value) { _layers.Vegetation = value; OnPropertyChanged(); } }
-        }
-
-        public bool PowerLines
-        {
-            get => _layers.PowerLines;
-            set { if (_layers.PowerLines != value) { _layers.PowerLines = value; OnPropertyChanged(); } }
-        }
-
-        public TichumLayersViewModel(LayerModel layers)
-        {
-            _layers = layers;
+            if (SelectedArea != null && parameter is CustomLayerModel layer)
+            {
+                SelectedArea.CustomLayers.Remove(layer);
+            }
         }
     }
 }

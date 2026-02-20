@@ -5,85 +5,128 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Margin="0,0,0,30">
-            <StackPanel>
-                <TextBlock Text="שכבות תיחום" FontSize="28" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                <TextBlock Text="בחר את השכבות עבור תיחום המפה" FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
-            </StackPanel>
+        <!-- Left sidebar for Tichum Areas selection -->
+        <Border Grid.Column="0" Background="{DynamicResource SidebarBackgroundBrush}" Margin="0,0,20,0" CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource BorderColorBrush}">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Text="אזורי תיחום" FontWeight="Bold" FontSize="18" Margin="0,0,0,15" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <ListBox ItemsSource="{Binding TichumAreas}" SelectedItem="{Binding SelectedArea}" BorderThickness="0" Background="Transparent">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10" CornerRadius="8">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Medium"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border x:Name="Border" Background="Transparent" CornerRadius="8" Margin="0,2">
+                                                    <ContentPresenter />
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                                        <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+
+                        <Button Content="Apply to All" Command="{Binding ApplyToAllCommand}" IsEnabled="{Binding HasSelection}" Margin="0,15,0,0" Style="{StaticResource SecondaryButtonStyle}" Height="40"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
         </Border>
 
-        <!-- Main Card Content -->
-        <Border Grid.Row="1" Style="{StaticResource ContentCardStyle}">
-            <StackPanel>
-                <Grid Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock Text="Orthophoto" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                        <TextBlock Text="התצלומים" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
-                    </StackPanel>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Orthophoto}"/>
-                </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+        <!-- Main Content (Layers for selected Tichum) -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                <Grid Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock Text="DTM" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                        <TextBlock Text="הגבהים" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
-                    </StackPanel>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding DTM}"/>
-                </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+            <!-- Header -->
+            <Border Grid.Row="0" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="שכבות תיחום:" Style="{StaticResource PageHeaderStyle}"/>
+                    <TextBlock Text="{Binding SelectedArea.Name, StringFormat='{}שכבות אפשריות עבור תיחום: {0}', TargetNullValue='Please select an area'}" Style="{StaticResource PageSubHeaderStyle}"/>
+                </StackPanel>
+            </Border>
 
-                <Grid Margin="0,0,0,15">
+            <!-- Layers Selection Card -->
+            <Border Grid.Row="1" Style="{StaticResource ContentCardStyle}" IsEnabled="{Binding HasSelection}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <TextBlock Text="Buildings" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                        <TextBlock Text="בניינים גנריים" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
-                    </StackPanel>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Buildings}"/>
-                </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+                        <!-- Custom Layers Section -->
+                        <TextBlock Text="שכבות להעלאה" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}" Margin="0,0,0,24"/>
+                        <TextBlock Text="הוסיפו שכבות מותאמות אישית לעיבוד בתא השטח" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}" Margin="0,-18,0,24"/>
+                        
+                        <Separator Background="{DynamicResource BorderColorBrush}" Margin="0,0,0,24"/>
 
-                <Grid Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock Text="Fences" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                        <TextBlock Text="גדרות בתא השטח" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
-                    </StackPanel>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Fences}"/>
-                </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+                        
+                        <ItemsControl ItemsSource="{Binding SelectedArea.CustomLayers}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Grid Margin="0,0,0,15">
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                                                <TextBlock Text="שכבה מותאמת אישית" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <CheckBox Style="{StaticResource ToggleSwitchStyle}" VerticalAlignment="Center" IsChecked="{Binding IsSelected}" Margin="0,0,15,0"/>
+                                                <Button Style="{StaticResource TrashButtonStyle}" Width="32" Height="32" VerticalAlignment="Center"
+                                                        Command="{Binding DataContext.RemoveCustomLayerCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                        CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                        <Separator Background="{DynamicResource BorderColorBrush}" Margin="0,0,0,15"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                <Grid Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock Text="Roads" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                        <TextBlock Text="כבישים בתא השטח" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
-                    </StackPanel>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Roads}"/>
-                </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+                        <!-- Add New Custom Layer -->
+                        <Grid Margin="0,15,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding NewLayerName, UpdateSourceTrigger=PropertyChanged}" 
+                                     Height="40" Margin="0,0,10,0" Tag="New layer name..."/>
+                            
+                            <Button Grid.Column="1" Command="{Binding AddCustomLayerCommand}" Style="{StaticResource SecondaryButtonStyle}" 
+                                    Content="הוסף שכבה" Height="40" Padding="15,0"/>
+                        </Grid>
 
-                <Grid Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock Text="Vegetation" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                        <TextBlock Text="צמחייה בתא השטח" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
                     </StackPanel>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Vegetation}"/>
-                </Grid>
-
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
-                <Grid Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock Text="Power Lines" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                        <TextBlock Text="עמודי חשמל בתא השטח" FontSize="13" Foreground="{StaticResource SecondaryTextBrush}"/>
-                    </StackPanel>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding PowerLines}"/>
-                </Grid>
-            </StackPanel>
-        </Border>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

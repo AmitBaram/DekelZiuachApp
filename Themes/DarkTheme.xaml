@@ -1,18 +1,21 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Dark Theme Colors -->
-    <Color x:Key="PrimaryBlueColor">#3B82F6</Color> <!-- Slightly lighter blue for dark mode -->
+    <!-- Premium Dark Theme — VSCode/Spotify inspired -->
+    <Color x:Key="PrimaryBlueColor">#7C6EF0</Color>
     <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlueColor}"/>
-    
-    <SolidColorBrush x:Key="LightBlueBrush" Color="#1E1E2E"/> <!-- Dark blueish gray -->
-    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#1F2937"/> <!-- Dark gray card -->
-    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#111827"/> <!-- Very dark background -->
-    
-    <SolidColorBrush x:Key="PrimaryTextBrush" Color="#F9FAFB"/> <!-- White text -->
-    <SolidColorBrush x:Key="SecondaryTextBrush" Color="#9CA3AF"/> <!-- Light gray text -->
-    
-    <SolidColorBrush x:Key="BorderColorBrush" Color="#374151"/> <!-- Dark border -->
-    <SolidColorBrush x:Key="SidebarSeparationBrush" Color="#374151"/>
-    <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#374151"/>
-    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#111827"/> <!-- Dark input background -->
+
+    <SolidColorBrush x:Key="LightBlueBrush" Color="#2A2540"/>
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#1C1C1C"/>
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#0F0F0F"/>
+
+    <SolidColorBrush x:Key="PrimaryTextBrush" Color="#F0F0F0"/>
+    <SolidColorBrush x:Key="SecondaryTextBrush" Color="#888888"/>
+    <SolidColorBrush x:Key="TertiaryTextBrush" Color="#555555"/>
+
+    <SolidColorBrush x:Key="BorderColorBrush" Color="#2E2E2E"/>
+    <SolidColorBrush x:Key="SidebarSeparationBrush" Color="#222222"/>
+    <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#272727"/>
+    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#181818"/>
+    <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#161616"/>
+    <SolidColorBrush x:Key="ElevatedCardBrush" Color="#242424"/>
 </ResourceDictionary>

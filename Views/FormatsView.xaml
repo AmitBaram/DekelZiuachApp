@@ -19,8 +19,8 @@
                     <Path Data="{StaticResource IconFormats}" Fill="{StaticResource PrimaryBlueBrush}" Stretch="Uniform" Margin="12"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="פורמטים" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <TextBlock Text="תבחר את הפורמטים שאתה רוצה." FontSize="14" Foreground="{StaticResource SecondaryTextBrush}"/>
+                    <TextBlock Text="פורמטים" Style="{StaticResource PageHeaderStyle}"/>
+                    <TextBlock Text="תבחר את הפורמטים שאתה רוצה." Style="{StaticResource PageSubHeaderStyle}"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -61,12 +61,12 @@
                 </StackPanel>
             </Border>
 
-            <!-- VBS3 Box -->
+            <!-- TXP Box -->
             <Border>
                 <Border.Style>
                     <Style TargetType="Border" BasedOn="{StaticResource StatusBoxStyle}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding VBS3}" Value="True">
+                            <DataTrigger Binding="{Binding TXP}" Value="True">
                                 <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
                                 <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
                             </DataTrigger>
@@ -74,24 +74,7 @@
                     </Style>
                 </Border.Style>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="VBS3" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
-                </StackPanel>
-            </Border>
-
-            <!-- VBS4 Box -->
-            <Border>
-                <Border.Style>
-                    <Style TargetType="Border" BasedOn="{StaticResource StatusBoxStyle}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding VBS4}" Value="True">
-                                <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
-                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="VBS4" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
+                    <TextBlock Text="TXP" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
                 </StackPanel>
             </Border>
         </StackPanel>
@@ -103,23 +86,17 @@
                     <TextBlock Text="MFT" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
                     <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding MFT}"/>
                 </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+                <Separator Background="{DynamicResource BorderColorBrush}" Margin="0,0,0,15"/>
 
                 <Grid Margin="0,0,0,15">
                     <TextBlock Text="CDB" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
                     <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding CDB}"/>
                 </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
+                <Separator Background="{DynamicResource BorderColorBrush}" Margin="0,0,0,15"/>
 
                 <Grid Margin="0,0,0,15">
-                    <TextBlock Text="VBS3" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding VBS3}"/>
-                </Grid>
-                <Separator Background="#F1F5F9" Margin="0,0,0,15"/>
-
-                <Grid Margin="0,0,0,15">
-                    <TextBlock Text="VBS4" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
-                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding VBS4}"/>
+                    <TextBlock Text="TXP" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
+                    <CheckBox Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" IsChecked="{Binding TXP}"/>
                 </Grid>
             </StackPanel>
         </Border>

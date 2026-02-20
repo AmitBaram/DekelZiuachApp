@@ -21,27 +21,20 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    private void ThemeToggle_Checked(object sender, RoutedEventArgs e)
+
+    private void Minimize_Click(object sender, RoutedEventArgs e)
     {
-        SwitchTheme(true);
+        Window.GetWindow(this).WindowState = WindowState.Minimized;
     }
 
-    private void ThemeToggle_Unchecked(object sender, RoutedEventArgs e)
+    private void Maximize_Click(object sender, RoutedEventArgs e)
     {
-        SwitchTheme(false);
+        var win = Window.GetWindow(this);
+        win.WindowState = win.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
     }
 
-    private void SwitchTheme(bool isDark)
+    private void Close_Click(object sender, RoutedEventArgs e)
     {
-        var newThemeSource = new Uri(isDark ? "Themes/DarkTheme.xaml" : "Themes/LightTheme.xaml", UriKind.Relative);
-        
-        // Load the new dictionary
-        var newTheme = new ResourceDictionary { Source = newThemeSource };
-
-        // Find and replace the existing theme dictionary
-        if (Application.Current.Resources.MergedDictionaries.Count > 0)
-        {
-            Application.Current.Resources.MergedDictionaries[0] = newTheme;
-        }
+        Window.GetWindow(this).Close();
     }
 }

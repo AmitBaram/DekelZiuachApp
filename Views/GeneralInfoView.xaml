@@ -14,8 +14,8 @@
         <!-- Header -->
         <Border Grid.Row="0" Margin="0,0,0,30">
             <StackPanel>
-                <TextBlock Text="מידע כללי" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}"/>
-                <TextBlock Text="הזן את פרטי היחידה והמבצע לניהול הדיווח." FontSize="14" Foreground="{DynamicResource SecondaryTextBrush}"/>
+                <TextBlock Text="מידע כללי" Style="{StaticResource PageHeaderStyle}"/>
+                <TextBlock Text="הזן את פרטי היחידה והמבצע לניהול הדיווח." Style="{StaticResource PageSubHeaderStyle}"/>
             </StackPanel>
         </Border>
 

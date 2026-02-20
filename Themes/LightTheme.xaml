@@ -1,18 +1,28 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Light Theme Colors -->
-    <Color x:Key="PrimaryBlueColor">#2563EB</Color>
+    <!-- Modern Light-Brown Palette -->
+    <Color x:Key="PrimaryBlueColor">#8B5E3C</Color> <!-- Warm Bronze -->
     <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlueColor}"/>
-    
-    <SolidColorBrush x:Key="LightBlueBrush" Color="#EEF2FF"/>
-    <SolidColorBrush x:Key="CardBackgroundBrush" Color="White"/>
-    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#F8FAFC"/>
-    
-    <SolidColorBrush x:Key="PrimaryTextBrush" Color="#111827"/>
-    <SolidColorBrush x:Key="SecondaryTextBrush" Color="#6B7280"/>
-    
-    <SolidColorBrush x:Key="BorderColorBrush" Color="#E5E7EB"/>
-    <SolidColorBrush x:Key="SidebarSeparationBrush" Color="#F1F5F9"/>
-    <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#F9FAFB"/>
-    <SolidColorBrush x:Key="InputBackgroundBrush" Color="White"/>
+
+    <SolidColorBrush x:Key="LightBlueBrush" Color="#F5F2ED"/> <!-- Soft Sand -->
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FAF9F6"/> <!-- Warm Cream -->
+
+    <SolidColorBrush x:Key="PrimaryTextBrush" Color="#2D1B0E"/> <!-- Deep Chocolate -->
+    <SolidColorBrush x:Key="SecondaryTextBrush" Color="#7A7169"/> <!-- Muted Taupe -->
+    <SolidColorBrush x:Key="TertiaryTextBrush" Color="#A59D94"/>
+
+    <SolidColorBrush x:Key="BorderColorBrush" Color="#E5E1D8"/>
+    <SolidColorBrush x:Key="SidebarSeparationBrush" Color="#EFEBE4"/>
+    <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#F0ECE4"/>
+    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#F5F2ED"/>
+    <SolidColorBrush x:Key="ElevatedCardBrush" Color="#FFFFFF"/>
+
+    <!-- Gradient for "Color changing in the word" effect with shimmer -->
+    <LinearGradientBrush x:Key="ModernGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#8B5E3C" Offset="0"/> <!-- Bronze -->
+        <GradientStop x:Name="ShimmerStop" Color="#D4AF37" Offset="0.5"/> <!-- Gold shimmer -->
+        <GradientStop Color="#8B5E3C" Offset="1"/>
+    </LinearGradientBrush>
 </ResourceDictionary>

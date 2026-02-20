@@ -6,172 +6,202 @@
         xmlns:vm="clr-namespace:DekelApp.ViewModels"
         xmlns:views="clr-namespace:DekelApp.Views"
         mc:Ignorable="d"
-        Title="Dekel Application" Height="720" Width="1150"
-        MinWidth="950" MinHeight="600"
-        WindowStartupLocation="Manual" Top="20" Left="50"
-        Background="{DynamicResource WindowBackgroundBrush}"
-        FlowDirection="RightToLeft">
+        Title="Dekel" Height="675" Width="1080"
+        MinWidth="900" MinHeight="576"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        FlowDirection="RightToLeft"
+        FontFamily="Segoe UI">
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40" 
+                      CornerRadius="12"
+                      GlassFrameThickness="0"
+                      ResizeBorderThickness="8"/>
+    </WindowChrome.WindowChrome>
     <Window.Resources>
-        <!-- DataTemplates -->
         <DataTemplate DataType="{x:Type vm:TichumLayersViewModel}"><views:TichumLayersView /></DataTemplate>
-        <DataTemplate DataType="{x:Type vm:MikudLayersViewModel}"><views:MikudLayersView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:FormatsViewModel}"><views:FormatsView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:TichumViewModel}"><views:TichumView /></DataTemplate>
-        <DataTemplate DataType="{x:Type vm:MikudViewModel}"><views:MikudView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:YeadimViewModel}"><views:YeadimView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:GeneralInfoViewModel}"><views:GeneralInfoView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:FinishViewModel}"><views:FinishView /></DataTemplate>
     </Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="260"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <Border x:Name="AppBorder"
+            Background="{DynamicResource WindowBackgroundBrush}"
+            BorderBrush="{DynamicResource BorderColorBrush}"
+            BorderThickness="1"
+            CornerRadius="12"
+            ClipToBounds="True">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/> <!-- Custom Title Bar Row -->
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <!-- Sidebar -->
-        <Border Grid.Column="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource SidebarSeparationBrush}" BorderThickness="0,0,1,0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <!-- Logo/Title and Theme Toggle -->
-                <StackPanel Grid.Row="0" Margin="30,30,30,30">
-                    <Grid Margin="0,0,0,20">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="המצייח" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}"/>
-                        </StackPanel>
-                        
-                        <!-- Modern Theme Toggle -->
-                        <ToggleButton x:Name="ThemeToggle" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                      Checked="ThemeToggle_Checked" Unchecked="ThemeToggle_Unchecked"
-                                      Cursor="Hand" Width="40" Height="40">
-                            <ToggleButton.Template>
-                                <ControlTemplate TargetType="ToggleButton">
-                                    <Border x:Name="Border" CornerRadius="20" Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
-                                        <Grid>
-                                            <!-- Moon Icon (Visible when Unchecked/Light) -->
-                                            <Path x:Name="MoonIcon" 
-                                                  Data="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" 
-                                                  Fill="{DynamicResource SecondaryTextBrush}" 
-                                                  Width="20" Height="20" Stretch="Uniform"
-                                                  RenderTransformOrigin="0.5,0.5">
-                                                <Path.RenderTransform>
-                                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
-                                                </Path.RenderTransform>
-                                            </Path>
-                                            
-                                            <!-- Sun Icon (Visible when Checked/Dark) -->
-                                            <Path x:Name="SunIcon" 
-                                                  Data="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.29 1.29c.19.19.45.29.71.29s.51-.1.71-.29a.996.996 0 000-1.41L5.99 4.58zm12.37 12.37a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.29 1.29c.18.19.43.29.71.29.27 0 .52-.11.71-.29a.996.996 0 000-1.41l-1.3-1.29zM19.07 5.29a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.29 1.29a.996.996 0 000 1.41c.19.2.45.3.71.3.26 0 .51-.1.71-.29l1.28-1.3zM6.69 18.36a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.29 1.29c.19.19.45.29.71.29s.51-.1.71-.29a.996.996 0 000-1.41l-1.3-1.29z" 
-                                                  Fill="#FDB813" 
-                                                  Width="22" Height="22" Stretch="Uniform"
-                                                  Visibility="Collapsed"
-                                                  RenderTransformOrigin="0.5,0.5">
-                                                <Path.RenderTransform>
-                                                    <RotateTransform Angle="0"/>
-                                                </Path.RenderTransform>
-                                            </Path>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource HoverBackgroundBrush}"/>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="True">
-                                            <Setter TargetName="MoonIcon" Property="Visibility" Value="Collapsed"/>
-                                            <Setter TargetName="SunIcon" Property="Visibility" Value="Visible"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </ToggleButton.Template>
-                        </ToggleButton>
-                    </Grid>
-                    
-                    <TextBlock Text="תוכנה לציוד מבצעי" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}"/>
+            <!-- Custom Title Bar -->
+            <Grid Grid.Row="0" Background="{DynamicResource SidebarBackgroundBrush}">
+                <TextBlock Text="Dekel" VerticalAlignment="Center" Margin="16,0"
+                           FontSize="12" FontWeight="SemiBold" Opacity="0.5"
+                           Foreground="{DynamicResource PrimaryTextBrush}"/>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Button x:Name="MinimizeBtn" Click="Minimize_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="−"/>
+                    <Button x:Name="MaximizeBtn" Click="Maximize_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="▢"/>
+                    <Button x:Name="CloseBtn" Click="Close_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="✕" Foreground="#E81123"/>
                 </StackPanel>
-
-                <!-- Navigation List -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
-                    <StackPanel>
-                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateGeneralInfoCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:GeneralInfoViewModel}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path x:Name="SidebarIconElement" Data="{StaticResource IconGeneral}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="15,0,0,0"/>
-                                <TextBlock Text=" מידע כללי " VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                            </StackPanel>
-                        </RadioButton>
-
-                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateFormatsCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:FormatsViewModel}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconFormats}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="15,0,0,0"/>
-                                <TextBlock Text=" פורמטים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                            </StackPanel>
-                        </RadioButton>
-
-                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateTichumCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumViewModel}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconTichum}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="15,0,0,0"/>
-                                <TextBlock Text=" תיחום" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                            </StackPanel>
-                        </RadioButton>
-
-                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateMikudCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:MikudViewModel}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconMikud}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="15,0,0,0"/>
-                                <TextBlock Text=" מיקוד" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                            </StackPanel>
-                        </RadioButton>
-
-                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateTichumLayersCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumLayersViewModel}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconLayers}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="15,0,0,0"/>
-                                <TextBlock Text=" שכבות תיחום" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                            </StackPanel>
-                        </RadioButton>
-
-                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateMikudLayersCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:MikudLayersViewModel}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconLayers}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="15,0,0,0"/>
-                                <TextBlock Text=" שכבות מיקוד" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                            </StackPanel>
-                        </RadioButton>
-
-                        <RadioButton Style="{StaticResource SidebarItemStyle}" Command="{Binding NavigateYeadimCommand}" IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:YeadimViewModel}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconYeadim}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="20" Height="20" Stretch="Uniform" Margin="15,0,0,0"/>
-                                <TextBlock Text=" יעדים" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
-                            </StackPanel>
-                        </RadioButton>
-                    </StackPanel>
-                </ScrollViewer>
-
-                <!-- Footer section with different background -->
-                <Border Grid.Row="2" Background="#F8FAFC" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
-                    <Button Content="סיום והפקה" 
-                            Command="{Binding NavigateFinishCommand}"
-                            Margin="25,30,25,35" 
-                            Height="60" 
-                            Background="{StaticResource PrimaryBlueBrush}" 
-                            Foreground="White" 
-                            FontSize="17"
-                            FontWeight="Bold" 
-                            BorderThickness="0">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="12"/>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-                </Border>
             </Grid>
-        </Border>
 
-        <!-- Main Content wrapped in ScrollViewer for resizing -->
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <ContentControl Content="{Binding Navigation.CurrentViewModel}" Margin="40,30,40,30"/>
-        </ScrollViewer>
-    </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="216"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Sidebar -->
+                <Border Grid.Column="0"
+                        Background="{DynamicResource SidebarBackgroundBrush}"
+                        BorderBrush="{DynamicResource SidebarSeparationBrush}"
+                        BorderThickness="0,0,1,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Logo & Brand -->
+                        <Grid Grid.Row="0" Margin="20,25,20,30">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <!-- App Icon -->
+                                <Border Width="40" Height="40" CornerRadius="10"
+                                        Background="{DynamicResource LightBlueBrush}"
+                                        BorderThickness="1" BorderBrush="{DynamicResource BorderColorBrush}"
+                                        Margin="0,0,16,0">
+                                    <Path Data="{StaticResource IconLayers}" Fill="{DynamicResource PrimaryBlueBrush}"
+                                          Stretch="Uniform" Margin="9" Width="22" Height="22"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="המצייח" 
+                                               FontSize="24" 
+                                               FontWeight="Black" 
+                                               Foreground="{DynamicResource ModernGradientBrush}"
+                                               Margin="0,0,0,-4"/>
+                                    <TextBlock Text="ציוד מבצעי" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource DeepChocolateBrush}" 
+                                               Opacity="0.5"
+                                               Margin="0,0,2,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Section label -->
+                        <Border Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="ניווט" FontSize="10" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource SecondaryTextBrush}"
+                                           Margin="20,0,20,8" Opacity="0.6"
+                                           FlowDirection="RightToLeft"/>
+
+                                <RadioButton Style="{StaticResource SidebarItemStyle}"
+                                             Command="{Binding NavigateGeneralInfoCommand}"
+                                             IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:GeneralInfoViewModel}}">
+                                    <StackPanel Orientation="Horizontal" Margin="12,0,0,0">
+                                        <Path Data="{StaticResource IconGeneral}"
+                                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                              Width="18" Height="18" Stretch="Uniform"/>
+                                        <TextBlock Text=" מידע כללי" VerticalAlignment="Center" FontSize="14" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <RadioButton Style="{StaticResource SidebarItemStyle}"
+                                             Command="{Binding NavigateFormatsCommand}"
+                                             IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:FormatsViewModel}}">
+                                    <StackPanel Orientation="Horizontal" Margin="12,0,0,0">
+                                        <Path Data="{StaticResource IconFormats}"
+                                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                              Width="18" Height="18" Stretch="Uniform"/>
+                                        <TextBlock Text=" פורמטים" VerticalAlignment="Center" FontSize="14" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <RadioButton Style="{StaticResource SidebarItemStyle}"
+                                             Command="{Binding NavigateTichumCommand}"
+                                             IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumViewModel}}">
+                                    <StackPanel Orientation="Horizontal" Margin="12,0,0,0">
+                                        <Path Data="{StaticResource IconTichum}"
+                                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                              Width="18" Height="18" Stretch="Uniform"/>
+                                        <TextBlock Text=" תיחום" VerticalAlignment="Center" FontSize="14" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <RadioButton Style="{StaticResource SidebarItemStyle}"
+                                             Command="{Binding NavigateTichumLayersCommand}"
+                                             IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:TichumLayersViewModel}}">
+                                    <StackPanel Orientation="Horizontal" Margin="12,0,0,0">
+                                        <Path Data="{StaticResource IconLayers}"
+                                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                              Width="18" Height="18" Stretch="Uniform"/>
+                                        <TextBlock Text=" שכבות תיחום" VerticalAlignment="Center" FontSize="14" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <RadioButton Style="{StaticResource SidebarItemStyle}"
+                                             Command="{Binding NavigateYeadimCommand}"
+                                             IsChecked="{Binding Navigation.CurrentViewModel, Mode=OneWay, Converter={StaticResource TypeToBooleanConverter}, ConverterParameter={x:Type vm:YeadimViewModel}}">
+                                    <StackPanel Orientation="Horizontal" Margin="12,0,0,0">
+                                        <Path Data="{StaticResource IconYeadim}"
+                                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                              Width="18" Height="18" Stretch="Uniform"/>
+                                        <TextBlock Text=" יעדים" VerticalAlignment="Center" FontSize="14" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                </RadioButton>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Finish CTA -->
+                        <Border Grid.Row="2"
+                                BorderBrush="{DynamicResource SidebarSeparationBrush}"
+                                BorderThickness="0,1,0,0"
+                                Background="{DynamicResource SidebarBackgroundBrush}">
+                            <Button Command="{Binding NavigateFinishCommand}"
+                                    Margin="16,20,16,24" Height="48"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Cursor="Hand">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="✓" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <TextBlock Text="סיום והפקה" VerticalAlignment="Center" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Main Content -->
+                <Grid Grid.Column="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  Background="{DynamicResource WindowBackgroundBrush}">
+                        <ContentControl Content="{Binding Navigation.CurrentViewModel}" Margin="40,32,40,32"/>
+                    </ScrollViewer>
+                    
+                    <!-- Sidebar Shadow Transition -->
+                    <Rectangle Width="10" HorizontalAlignment="Left" IsHitTestVisible="False">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#08000000" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
 </Window>

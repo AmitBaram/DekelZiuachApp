@@ -18,18 +18,13 @@ namespace DekelApp.ViewModels
             set { if (_formats.MFT != value) { _formats.MFT = value; OnPropertyChanged(); } }
         }
 
-        public bool VBS3
+        public bool TXP
         {
-            get => _formats.VBS3;
-            set { if (_formats.VBS3 != value) { _formats.VBS3 = value; OnPropertyChanged(); } }
+            get => _formats.TXP;
+            set { if (_formats.TXP != value) { _formats.TXP = value; OnPropertyChanged(); } }
         }
 
-        public bool VBS4
-        {
-            get => _formats.VBS4;
-            set { if (_formats.VBS4 != value) { _formats.VBS4 = value; OnPropertyChanged(); } }
-        }
-
+        
         public FormatsViewModel(FormatModel formats)
         {
             _formats = formats;

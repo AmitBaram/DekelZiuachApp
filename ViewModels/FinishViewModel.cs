@@ -28,58 +28,85 @@ namespace DekelApp.ViewModels
 
         private async Task FinishAsync()
         {
-            var result = MessageBox.Show("Are you sure you want to finish?", "Confirm Finish", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes)
+            if (_validationService.ValidateAppData(_appData, out string errorMessage))
             {
-                if (_validationService.ValidateAppData(_appData, out string errorMessage))
+                try
                 {
-                    try
+                    var rootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "Dekel");
+                    var exportPath = Path.Combine(rootPath, "Send_This_Folder");
+                    var tichumExportPath = Path.Combine(exportPath, "Tichum");
+                    var mikudExportPath = Path.Combine(exportPath, "Mikud");
+                    
+                    var jsonFilePath = Path.Combine(exportPath, "send this file.json");
+
+                    // Sanitize coordinates: clear unused fields based on coordinate system
+                    foreach (var area in _appData.TichumAreas)
                     {
-                        var rootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "Dekel");
-                        var exportPath = Path.Combine(rootPath, "Send_This_Folder");
-                        var tichumExportPath = Path.Combine(exportPath, "Tichum");
-                        var mikudExportPath = Path.Combine(exportPath, "Mikud");
-                        
-                        var jsonFilePath = Path.Combine(exportPath, "data.json");
-
-                        // Save JSON
-                        await _fileService.SaveAsync(_appData, jsonFilePath);
-
-                        // Copy uploaded files to respective subfolders
-                        if (_appData.Tichum.IsFileUploaded && !string.IsNullOrEmpty(_appData.Tichum.FilePath))
+                        foreach (var coord in area.Coordinates)
                         {
-                            await _fileService.CopyShapefileAsync(_appData.Tichum.FilePath, tichumExportPath);
-                        }
-                        
-                        // Copy Mikud files for each area
-                        for (int i = 0; i < _appData.MikudAreas.Count; i++)
-                        {
-                            var area = _appData.MikudAreas[i];
-                            if (area.IsFileUploaded && !string.IsNullOrEmpty(area.FilePath))
+                            if (area.CoordinateSystem == DekelApp.Models.CoordinateSystemType.UTM)
                             {
-                                // Sanitize name for folder (replace spaces/illegal chars)
-                                string sanitizedName = string.Join("_", area.Name.Split(Path.GetInvalidFileNameChars()));
-                                var areaPath = Path.Combine(mikudExportPath, sanitizedName);
-                                await _fileService.CopyShapefileAsync(area.FilePath, areaPath);
+                                coord.Latitude = null;
+                                coord.Longitude = null;
+                            }
+                            else
+                            {
+                                coord.Easting = null;
+                                coord.Northing = null;
+                                coord.Zone = null;
                             }
                         }
+                    }
 
-                        MessageBox.Show($"Data saved successfully to {exportPath}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                        
-                        // Open the folder in File Explorer
-                        Process.Start("explorer.exe", rootPath);
+                    foreach (var target in _appData.YeadimTargets)
+                    {
+                        if (_appData.YeadimCoordinateSystem == DekelApp.Models.CoordinateSystemType.UTM)
+                        {
+                            target.Latitude = null;
+                            target.Longitude = null;
+                        }
+                        else
+                        {
+                            target.Easting = null;
+                            target.Northing = null;
+                            target.Zone = null;
+                        }
+                    }
 
-                        Application.Current.Shutdown();
+                    // Save JSON
+                    await _fileService.SaveAsync(_appData, jsonFilePath);
+
+                    // Copy Tichum files for each area
+                    // The user requested: "I will not save the file it will extract the cordinants in GEO and write them to the json"
+                    // Since we extracted them directly into the ObservableCollection when uploaded,
+                    // _appData serialization in SaveAsync takes care of them automatically.
+                    // We remove the old shapefile copy logic here.
+
+                    MessageBox.Show($"Data saved successfully to {exportPath}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    
+                    // Open the folder in File Explorer
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(exportPath)
+                        {
+                            UseShellExecute = true
+                        });
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Error saving data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Debug.WriteLine($"Failed to open explorer: {ex.Message}");
                     }
+
+                    Application.Current.Shutdown();
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show($"Error saving data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+            else
+            {
+                MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

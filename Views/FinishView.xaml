@@ -6,29 +6,28 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-        <Border Style="{StaticResource CardStyle}" Padding="50" MaxWidth="500">
+        <Border Style="{StaticResource ContentCardStyle}" MaxWidth="550">
             <StackPanel HorizontalAlignment="Center">
-                <Border Width="64" Height="64" Background="{StaticResource LightBlueBrush}" CornerRadius="32" Margin="0,0,0,20">
-                    <Path Data="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41-1.41L9,16.17z" Fill="{StaticResource PrimaryBlueBrush}" Stretch="Uniform" Margin="15"/>
+                <Border Width="80" Height="80" Background="{StaticResource LightBlueBrush}" CornerRadius="40" Margin="0,0,0,32">
+                    <Path Data="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41-1.41L9,16.17z" Fill="{StaticResource PrimaryBlueBrush}" Stretch="Uniform" Margin="22"/>
                 </Border>
-                <TextBlock Text="Ready to Finish?" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
-                <TextBlock Text="Validating your inputs and preparing the export..." 
-                           TextWrapping="Wrap" TextAlignment="Center" Foreground="{StaticResource SecondaryTextBrush}" Margin="0,0,0,40"/>
+                
+                <TextBlock Text="Ready to Finish?" Style="{StaticResource PageHeaderStyle}" HorizontalAlignment="Center"/>
+                <TextBlock Text="Everything is ready. Review your information one last time before exporting." 
+                           TextWrapping="Wrap" TextAlignment="Center" 
+                           FontSize="15" Foreground="{StaticResource SecondaryTextBrush}" Margin="0,0,0,48"/>
                 
                 <Button Content="Confirm and Export" 
                         Command="{Binding FinishCommand}" 
-                        Padding="40,15" 
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Padding="50,16" 
                         FontSize="18" 
-                        FontWeight="Bold" 
-                        Background="{StaticResource PrimaryBlueBrush}" 
-                        Foreground="White" 
-                        BorderThickness="0">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,8"/>
+                
+                <TextBlock Text="You can find the exported files in the designated output folder."
+                           FontSize="12" Opacity="0.6" HorizontalAlignment="Center"
+                           Foreground="{StaticResource SecondaryTextBrush}"/>
             </StackPanel>
         </Border>
     </Grid>

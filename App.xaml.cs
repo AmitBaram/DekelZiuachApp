@@ -25,11 +25,9 @@ namespace DekelApp
 
             // ViewModels
             services.AddSingleton<MainViewModel>();
-            services.AddTransient<TichumLayersViewModel>(s => new TichumLayersViewModel(s.GetRequiredService<AppData>().Tichum.Layers));
-            services.AddTransient<MikudLayersViewModel>(s => new MikudLayersViewModel(s.GetRequiredService<AppData>()));
+            services.AddTransient<TichumLayersViewModel>(s => new TichumLayersViewModel(s.GetRequiredService<AppData>()));
             services.AddTransient<FormatsViewModel>(s => new FormatsViewModel(s.GetRequiredService<AppData>().Formats));
             services.AddTransient<TichumViewModel>(s => new TichumViewModel(s.GetRequiredService<AppData>()));
-            services.AddTransient<MikudViewModel>(s => new MikudViewModel(s.GetRequiredService<AppData>()));
             services.AddTransient<YeadimViewModel>(s => new YeadimViewModel(s.GetRequiredService<AppData>().YeadimTargets, s.GetRequiredService<AppData>()));
             services.AddTransient<GeneralInfoViewModel>(s => new GeneralInfoViewModel(s.GetRequiredService<AppData>().GeneralInfo));
             services.AddTransient<FinishViewModel>();
@@ -43,6 +41,13 @@ namespace DekelApp
                 });
 
             _serviceProvider = services.BuildServiceProvider();
+
+            this.DispatcherUnhandledException += (s, e) =>
+            {
+                System.IO.File.WriteAllText("crash.log", e.Exception.ToString());
+                System.Windows.MessageBox.Show(e.Exception.Message, "Crash", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                e.Handled = true;
+            };
         }
 
         protected override void OnStartup(StartupEventArgs e)

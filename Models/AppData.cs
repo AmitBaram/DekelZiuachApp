@@ -11,23 +11,46 @@ namespace DekelApp.Models
         Geographic
     }
 
-    public class LayerModel
+
+    public class CustomLayerModel : ObservableObject
     {
-        public bool Orthophoto { get; set; } = true;
-        public bool DTM { get; set; } = true;
-        public bool Buildings { get; set; }
-        public bool Fences { get; set; }
-        public bool Roads { get; set; }
-        public bool Vegetation { get; set; }
-        public bool PowerLines { get; set; }
+        private string _name = string.Empty;
+        private bool _isSelected = true;
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => SetProperty(ref _isSelected, value);
+        }
     }
 
-    public class FormatModel
+    public class FormatModel : ObservableObject
     {
-        public bool CDB { get; set; }
-        public bool MFT { get; set; }
-        public bool VBS3 { get; set; }
-        public bool VBS4 { get; set; }
+        private bool _cdb;
+        private bool _mft;
+        private bool _txp;
+
+        public bool CDB 
+        { 
+            get => _cdb; 
+            set => SetProperty(ref _cdb, value); 
+        }
+        public bool MFT 
+        { 
+            get => _mft; 
+            set => SetProperty(ref _mft, value); 
+        }
+        public bool TXP 
+        { 
+            get => _txp; 
+            set => SetProperty(ref _txp, value); 
+        }
     }
 
     public class CoordinateModel : ObservableObject
@@ -141,52 +164,70 @@ namespace DekelApp.Models
         public Brush LatitudeStatusColor => IsLatitudeValid ? Brushes.Blue : Brushes.Red;
         [JsonIgnore]
         public Brush LongitudeStatusColor => IsLongitudeValid ? Brushes.Blue : Brushes.Red;
-    }
 
-    public class TichumModel : ObservableObject
-    {
-        private string? _filePath;
-        private bool _isFileUploaded;
-        private CoordinateSystemType _coordinateSystem = CoordinateSystemType.UTM;
-
-        public LayerModel Layers { get; set; } = new();
-        public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
-
-        public CoordinateSystemType CoordinateSystem
+        private bool _isDuplicate;
+        [JsonIgnore]
+        public bool IsDuplicate
         {
-            get => _coordinateSystem;
-            set => SetProperty(ref _coordinateSystem, value);
-        }
-
-        public string? FilePath
-        {
-            get => _filePath;
-            set => SetProperty(ref _filePath, value);
+            get => _isDuplicate;
+            set
+            {
+                if (SetProperty(ref _isDuplicate, value))
+                {
+                    OnPropertyChanged(nameof(DuplicateStatusText));
+                    OnPropertyChanged(nameof(DuplicateStatusVisibility));
+                }
+            }
         }
 
         [JsonIgnore]
-        public bool IsFileUploaded
-        {
-            get => _isFileUploaded;
-            set => SetProperty(ref _isFileUploaded, value);
-        }
+        public string DuplicateStatusText => "Identical coordinate";
+        [JsonIgnore]
+        public System.Windows.Visibility DuplicateStatusVisibility => IsDuplicate ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
     }
 
-    public class MikudAreaModel : ObservableObject
+    public class TichumAreaModel : ObservableObject
     {
         private bool _isFileUploaded;
         private string? _filePath;
         private string _name = string.Empty;
         private CoordinateSystemType _coordinateSystem = CoordinateSystemType.UTM;
+        private bool _isDuplicateName;
 
         public string Name
         {
             get => _name;
-            set => SetProperty(ref _name, value);
+            set
+            {
+                if (SetProperty(ref _name, value))
+                {
+                    OnPropertyChanged(nameof(NameStatusText));
+                    OnPropertyChanged(nameof(NameStatusVisibility));
+                }
+            }
         }
 
+        [JsonIgnore]
+        public bool IsDuplicateName
+        {
+            get => _isDuplicateName;
+            set
+            {
+                if (SetProperty(ref _isDuplicateName, value))
+                {
+                    OnPropertyChanged(nameof(NameStatusText));
+                    OnPropertyChanged(nameof(NameStatusVisibility));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string NameStatusText => string.IsNullOrWhiteSpace(Name) ? "fill tichum name" : (IsDuplicateName ? "Tichum name can't be the same" : string.Empty);
+        [JsonIgnore]
+        public System.Windows.Visibility NameStatusVisibility => (string.IsNullOrWhiteSpace(Name) || IsDuplicateName) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+
         public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
-        public LayerModel Layers { get; set; } = new();
+        public ObservableCollection<CustomLayerModel> CustomLayers { get; set; } = new();
 
         public CoordinateSystemType CoordinateSystem
         {
@@ -194,6 +235,7 @@ namespace DekelApp.Models
             set => SetProperty(ref _coordinateSystem, value);
         }
 
+        [JsonIgnore]
         public string? FilePath
         {
             get => _filePath;
@@ -216,12 +258,39 @@ namespace DekelApp.Models
         private string? _zone;
         private string? _latitude;
         private string? _longitude;
+        private bool _isDuplicateName;
 
         public string? Name
         {
             get => _name;
-            set => SetProperty(ref _name, value);
+            set
+            {
+                if (SetProperty(ref _name, value))
+                {
+                    OnPropertyChanged(nameof(NameStatusText));
+                    OnPropertyChanged(nameof(NameStatusVisibility));
+                }
+            }
         }
+
+        [JsonIgnore]
+        public bool IsDuplicateName
+        {
+            get => _isDuplicateName;
+            set
+            {
+                if (SetProperty(ref _isDuplicateName, value))
+                {
+                    OnPropertyChanged(nameof(NameStatusText));
+                    OnPropertyChanged(nameof(NameStatusVisibility));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string NameStatusText => string.IsNullOrWhiteSpace(Name) ? "fill target name" : (IsDuplicateName ? "Target name can't be the same" : string.Empty);
+        [JsonIgnore]
+        public System.Windows.Visibility NameStatusVisibility => (string.IsNullOrWhiteSpace(Name) || IsDuplicateName) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
         public string? Easting
         {
@@ -326,6 +395,26 @@ namespace DekelApp.Models
         public Brush LatitudeStatusColor => IsLatitudeValid ? Brushes.Blue : Brushes.Red;
         [JsonIgnore]
         public Brush LongitudeStatusColor => IsLongitudeValid ? Brushes.Blue : Brushes.Red;
+
+        private bool _isDuplicate;
+        [JsonIgnore]
+        public bool IsDuplicate
+        {
+            get => _isDuplicate;
+            set
+            {
+                if (SetProperty(ref _isDuplicate, value))
+                {
+                    OnPropertyChanged(nameof(DuplicateStatusText));
+                    OnPropertyChanged(nameof(DuplicateStatusVisibility));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string DuplicateStatusText => "Identical coordinate";
+        [JsonIgnore]
+        public System.Windows.Visibility DuplicateStatusVisibility => IsDuplicate ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
     }
 
     public class GeneralInfoModel
@@ -342,9 +431,8 @@ namespace DekelApp.Models
 
         public GeneralInfoModel GeneralInfo { get; set; } = new();
         public FormatModel Formats { get; set; } = new();
-        public TichumModel Tichum { get; set; } = new();
-        [JsonPropertyName("Mikud")]
-        public ObservableCollection<MikudAreaModel> MikudAreas { get; set; } = new();
+        [JsonPropertyName("Tichum")]
+        public ObservableCollection<TichumAreaModel> TichumAreas { get; set; } = new();
         [JsonPropertyName("Yeadim")]
         public ObservableCollection<YeadimTargetModel> YeadimTargets { get; set; } = new();
 

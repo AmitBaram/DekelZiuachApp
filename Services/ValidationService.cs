@@ -9,39 +9,14 @@ namespace DekelApp.Services
         {
             errorMessage = string.Empty;
 
-            // 0. At least one layer must be selected in both Tichum and Mikud
-            var tl = appData.Tichum.Layers;
-            if (!tl.Orthophoto && !tl.DTM && !tl.Buildings && !tl.Fences && !tl.Roads && !tl.Vegetation && !tl.PowerLines)
+            // 0 & 1 & 2. Tichum validation: At least one area must be defined. Each area must have coordinates/file AND at least one layer
+            if (!appData.TichumAreas.Any())
             {
-                errorMessage = "At least one layer must be selected in the Tichum Layers page.";
+                errorMessage = "At least one Tichum area must be defined.";
                 return false;
             }
 
-            // 1. Tichum validation: File uploaded OR at least 3 valid coordinates
-            int validTichumCount;
-            if (appData.Tichum.CoordinateSystem == CoordinateSystemType.UTM)
-            {
-                validTichumCount = appData.Tichum.Coordinates.Count(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid);
-            }
-            else
-            {
-                validTichumCount = appData.Tichum.Coordinates.Count(c => c.IsLatitudeValid && c.IsLongitudeValid);
-            }
-
-            if (!appData.Tichum.IsFileUploaded && validTichumCount < 3)
-            {
-                errorMessage = "Tichum must have either an uploaded file or at least 3 valid coordinates.";
-                return false;
-            }
-
-            // 2. Mikud validation: Each area must have coordinates/file AND at least one layer
-            if (!appData.MikudAreas.Any())
-            {
-                errorMessage = "At least one Mikud area must be defined.";
-                return false;
-            }
-
-            foreach (var area in appData.MikudAreas)
+            foreach (var area in appData.TichumAreas)
             {
                 bool isFileUploaded = area.IsFileUploaded;
                 int validCount;
@@ -57,16 +32,10 @@ namespace DekelApp.Services
                 
                 if (!isFileUploaded && validCount < 3)
                 {
-                    errorMessage = $"Mikud area '{area.Name}' must have either an uploaded file or at least 3 valid coordinates.";
+                    errorMessage = $"Tichum area '{area.Name}' must have either an uploaded file or at least 3 valid coordinates.";
                     return false;
                 }
 
-                var ml = area.Layers;
-                if (!ml.Orthophoto && !ml.DTM && !ml.Buildings && !ml.Fences && !ml.Roads && !ml.Vegetation && !ml.PowerLines)
-                {
-                    errorMessage = $"At least one layer must be selected for Mikud area '{area.Name}'.";
-                    return false;
-                }
 
                 foreach (var coord in area.Coordinates)
                 {
@@ -82,9 +51,29 @@ namespace DekelApp.Services
 
                     if (!isValid)
                     {
-                        errorMessage = $"All entered coordinates in Mikud area '{area.Name}' must be valid.";
+                        errorMessage = $"All entered coordinates in Tichum area '{area.Name}' must be valid.";
                         return false;
                     }
+                }
+
+                bool hasDuplicates = false;
+                if (area.CoordinateSystem == CoordinateSystemType.UTM)
+                {
+                    var validList = area.Coordinates.Where(c => c.IsEastingValid && c.IsNorthingValid && c.IsZoneValid).ToList();
+                    var distinctCount = validList.Select(c => $"{c.Easting?.Trim()}_{c.Northing?.Trim()}_{c.Zone?.Trim()}").Distinct().Count();
+                    hasDuplicates = distinctCount < validList.Count;
+                }
+                else
+                {
+                    var validList = area.Coordinates.Where(c => c.IsLatitudeValid && c.IsLongitudeValid).ToList();
+                    var distinctCount = validList.Select(c => $"{c.Latitude?.Trim()}_{c.Longitude?.Trim()}").Distinct().Count();
+                    hasDuplicates = distinctCount < validList.Count;
+                }
+
+                if (hasDuplicates)
+                {
+                    errorMessage = $"Tichum area '{area.Name}' must not contain identical coordinates.";
+                    return false;
                 }
             }
 
@@ -119,9 +108,29 @@ namespace DekelApp.Services
                 }
             }
 
+            bool hasYeadimDuplicates = false;
+            if (appData.YeadimCoordinateSystem == CoordinateSystemType.UTM)
+            {
+                var validYeadim = appData.YeadimTargets.Where(t => t.IsEastingValid && t.IsNorthingValid && t.IsZoneValid).ToList();
+                var distinctCount = validYeadim.Select(t => $"{t.Easting?.Trim()}_{t.Northing?.Trim()}_{t.Zone?.Trim()}").Distinct().Count();
+                hasYeadimDuplicates = distinctCount < validYeadim.Count;
+            }
+            else
+            {
+                var validYeadim = appData.YeadimTargets.Where(t => t.IsLatitudeValid && t.IsLongitudeValid).ToList();
+                var distinctCount = validYeadim.Select(t => $"{t.Latitude?.Trim()}_{t.Longitude?.Trim()}").Distinct().Count();
+                hasYeadimDuplicates = distinctCount < validYeadim.Count;
+            }
+
+            if (hasYeadimDuplicates)
+            {
+                errorMessage = "Yeadim targets must not contain identical coordinates.";
+                return false;
+            }
+
             // 4. At least one format is selected
             var f = appData.Formats;
-            if (!f.CDB && !f.MFT && !f.VBS3 && !f.VBS4)
+            if (!f.CDB && !f.MFT && !f.TXP)
             {
                 errorMessage = "At least one format must be selected.";
                 return false;
