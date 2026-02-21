@@ -79,7 +79,10 @@ namespace DekelApp.ViewModels
             if (_appData.TichumAreas.Count == 0)
             {
                 AddNewArea();
-                _appData.TichumAreas[0].Name = "דוגמא \"תל אביב\"";
+            }
+            else
+            {
+                RefreshAreaNames();
             }
             
             AddNewAreaCommand = new RelayCommand(_ => AddNewArea());
@@ -94,32 +97,45 @@ namespace DekelApp.ViewModels
             ToggleToGeographicCommand = new RelayCommand(_ => CoordinateSystem = CoordinateSystemType.Geographic);
 
             TichumAreas.CollectionChanged += TichumAreas_CollectionChanged;
-            foreach (var a in TichumAreas) a.PropertyChanged += Area_PropertyChanged;
         }
 
         private void TichumAreas_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null)
-                foreach (TichumAreaModel a in e.OldItems) a.PropertyChanged -= Area_PropertyChanged;
-            if (e.NewItems != null)
-                foreach (TichumAreaModel a in e.NewItems) a.PropertyChanged += Area_PropertyChanged;
-
-            UpdateNameDuplicates();
+            RefreshAreaNames();
         }
 
-        private void Area_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(TichumAreaModel.Name))
-            {
-                UpdateNameDuplicates();
-            }
-        }
 
         private void AddNewArea()
         {
-            var newArea = new TichumAreaModel { Name = string.Empty };
+            var newArea = new TichumAreaModel();
             TichumAreas.Add(newArea);
             CurrentArea = newArea;
+        }
+
+        private void RefreshAreaNames()
+        {
+            for (int i = 0; i < TichumAreas.Count; i++)
+            {
+                TichumAreas[i].Name = GetPriorityName(i);
+            }
+        }
+
+        private string GetPriorityName(int index)
+        {
+            return index switch
+            {
+                0 => "First",
+                1 => "Second",
+                2 => "Third",
+                3 => "Fourth",
+                4 => "Fifth",
+                5 => "Sixth",
+                6 => "Seventh",
+                7 => "Eighth",
+                8 => "Ninth",
+                9 => "Tenth",
+                _ => $"Area {index + 1}"
+            };
         }
 
         private void EditArea(object? area)
@@ -283,18 +299,6 @@ namespace DekelApp.ViewModels
             }
         }
 
-        private void UpdateNameDuplicates()
-        {
-            foreach (var area in TichumAreas) area.IsDuplicateName = false;
-
-            var groups = TichumAreas
-                .Where(a => !string.IsNullOrWhiteSpace(a.Name))
-                .GroupBy(a => a.Name.Trim().ToLower())
-                .Where(g => g.Count() > 1);
-
-            foreach (var g in groups)
-                foreach (var a in g) a.IsDuplicateName = true;
-        }
 
         private void UpdateDuplicates()
         {

@@ -100,10 +100,7 @@
                     <Grid Grid.Row="0" Margin="0,0,0,20">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="שם האזור: " FontSize="13" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <StackPanel>
-                                <TextBox Style="{StaticResource PillTextBoxStyle}" Text="{Binding CurrentArea.Name, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="40" FontSize="15" FontWeight="SemiBold"/>
-                                <TextBlock Text="{Binding CurrentArea.NameStatusText}" Foreground="Red" FontSize="10" FontWeight="Bold" Visibility="{Binding CurrentArea.NameStatusVisibility}" Margin="5,2,0,0"/>
-                            </StackPanel>
+                            <TextBlock Text="{Binding CurrentArea.Name}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <StackPanel Orientation="Horizontal" Margin="0,0,15,0">

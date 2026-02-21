@@ -34,7 +34,6 @@ namespace DekelApp.ViewModels
             set => SetProperty(ref _newLayerName, value);
         }
 
-        public ICommand ApplyToAllCommand { get; }
         public ICommand AddCustomLayerCommand { get; }
         public ICommand RemoveCustomLayerCommand { get; }
 
