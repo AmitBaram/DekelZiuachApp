@@ -42,7 +42,6 @@ namespace DekelApp.ViewModels
         public TichumLayersViewModel(AppData appData)
         {
             _appData = appData;
-            ApplyToAllCommand = new RelayCommand(_ => ApplyToAll());
             AddCustomLayerCommand = new RelayCommand(_ => AddCustomLayer());
             RemoveCustomLayerCommand = new RelayCommand(layer => RemoveCustomLayer(layer));
             
@@ -53,28 +52,6 @@ namespace DekelApp.ViewModels
             }
         }
 
-        private void ApplyToAll()
-        {
-            if (SelectedArea == null) return;
-
-            foreach (var area in TichumAreas)
-            {
-                if (area == SelectedArea) continue;
-
-                // Sync custom layers
-                area.CustomLayers.Clear();
-                foreach (var customLayer in SelectedArea.CustomLayers)
-                {
-                    area.CustomLayers.Add(new CustomLayerModel 
-                    { 
-                        Name = customLayer.Name, 
-                        IsSelected = customLayer.IsSelected 
-                    });
-                }
-            }
-
-            System.Windows.MessageBox.Show("Settings applied to all Tichum areas.", "Success", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
-        }
 
         private void AddCustomLayer()
         {

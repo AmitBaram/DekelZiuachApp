@@ -17,12 +17,14 @@ namespace DekelApp.Models
         private string _name = string.Empty;
         private bool _isSelected = true;
 
+        [JsonPropertyName("Name")]
         public string Name
         {
             get => _name;
             set => SetProperty(ref _name, value);
         }
 
+        [JsonPropertyName("IsSelected")]
         public bool IsSelected
         {
             get => _isSelected;
@@ -227,6 +229,7 @@ namespace DekelApp.Models
         public System.Windows.Visibility NameStatusVisibility => (string.IsNullOrWhiteSpace(Name) || IsDuplicateName) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
         public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
+        [JsonPropertyName("CustomLayers")]
         public ObservableCollection<CustomLayerModel> CustomLayers { get; set; } = new();
 
         public CoordinateSystemType CoordinateSystem

@@ -258,6 +258,9 @@ namespace DekelApp.ViewModels
 
                 // Automate Mikud completion
                 _appData.Formats.MFT = true;
+
+                // Auto-finish area as requested
+                FinishArea();
             }
         }
 

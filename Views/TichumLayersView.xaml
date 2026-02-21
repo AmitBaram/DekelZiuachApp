@@ -56,7 +56,6 @@
                             </ListBox.ItemContainerStyle>
                         </ListBox>
 
-                        <Button Content="Apply to All" Command="{Binding ApplyToAllCommand}" IsEnabled="{Binding HasSelection}" Margin="0,15,0,0" Style="{StaticResource SecondaryButtonStyle}" Height="40"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
