@@ -228,8 +228,10 @@ namespace DekelApp.Models
         [JsonIgnore]
         public System.Windows.Visibility NameStatusVisibility => (string.IsNullOrWhiteSpace(Name) || IsDuplicateName) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
+        [JsonInclude]
         public ObservableCollection<CoordinateModel> Coordinates { get; set; } = new();
         [JsonPropertyName("CustomLayers")]
+        [JsonInclude]
         public ObservableCollection<CustomLayerModel> CustomLayers { get; set; } = new();
 
         public CoordinateSystemType CoordinateSystem

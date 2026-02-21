@@ -22,11 +22,13 @@ namespace DekelApp.ViewModels
                 if (SetProperty(ref _selectedArea, value))
                 {
                     OnPropertyChanged(nameof(HasSelection));
+                    OnPropertyChanged(nameof(CustomLayers));
                 }
             }
         }
 
         public bool HasSelection => SelectedArea != null;
+        public ObservableCollection<CustomLayerModel>? CustomLayers => SelectedArea?.CustomLayers;
 
         public string NewLayerName
         {

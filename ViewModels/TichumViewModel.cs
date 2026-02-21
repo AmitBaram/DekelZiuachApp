@@ -76,15 +76,8 @@ namespace DekelApp.ViewModels
         {
             _appData = appData;
 
-            if (_appData.TichumAreas.Count == 0)
-            {
-                AddNewArea();
-            }
-            else
-            {
-                RefreshAreaNames();
-            }
-            
+            RefreshAreaNames();
+            CurrentArea = TichumAreas.FirstOrDefault();
             AddNewAreaCommand = new RelayCommand(_ => AddNewArea());
             EditAreaCommand = new RelayCommand(area => EditArea(area));
             DeleteAreaCommand = new RelayCommand(area => DeleteArea(area));

@@ -27,34 +27,36 @@
                 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <ListBox ItemsSource="{Binding TichumAreas}" SelectedItem="{Binding SelectedArea}" BorderThickness="0" Background="Transparent">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Padding="10" CornerRadius="8">
-                                        <TextBlock Text="{Binding Name}" FontWeight="Medium"/>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListBoxItem">
-                                                <Border x:Name="Border" Background="Transparent" CornerRadius="8" Margin="0,2">
-                                                    <ContentPresenter />
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsSelected" Value="True">
-                                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource LightBlueBrush}"/>
-                                                        <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
+                <ListBox ItemsSource="{Binding TichumAreas}" 
+                         SelectedItem="{Binding SelectedArea, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         BorderThickness="0" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="10" CornerRadius="8">
+                                <TextBlock Text="{Binding Name}" FontWeight="Medium"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="Border" Background="Transparent" CornerRadius="8" Margin="0,2">
+                                            <ContentPresenter />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
 
                     </StackPanel>
                 </ScrollViewer>
@@ -87,7 +89,7 @@
                         <Separator Background="{DynamicResource BorderColorBrush}" Margin="0,0,0,24"/>
 
                         
-                        <ItemsControl ItemsSource="{Binding SelectedArea.CustomLayers}">
+                        <ItemsControl ItemsSource="{Binding CustomLayers}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
