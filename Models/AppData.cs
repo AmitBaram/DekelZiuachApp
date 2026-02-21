@@ -293,7 +293,7 @@ namespace DekelApp.Models
         }
 
         [JsonIgnore]
-        public string NameStatusText => string.IsNullOrWhiteSpace(Name) ? "fill target name" : (IsDuplicateName ? "Target name can't be the same" : string.Empty);
+        public string NameStatusText => string.IsNullOrWhiteSpace(Name) ? "fill target name" : (IsDuplicateName ? "identical names" : string.Empty);
         [JsonIgnore]
         public System.Windows.Visibility NameStatusVisibility => (string.IsNullOrWhiteSpace(Name) || IsDuplicateName) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
@@ -445,6 +445,14 @@ namespace DekelApp.Models
         {
             get => _yeadimCoordinateSystem;
             set => SetProperty(ref _yeadimCoordinateSystem, value);
+        }
+        
+        private TichumAreaModel? _selectedTichumArea;
+        [JsonIgnore]
+        public TichumAreaModel? SelectedTichumArea
+        {
+            get => _selectedTichumArea;
+            set => SetProperty(ref _selectedTichumArea, value);
         }
     }
 }

@@ -24,7 +24,7 @@
                 </Border>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="אזורי תיחום" Style="{StaticResource PageHeaderStyle}"/>
-                    <TextBlock Text="ניהול אזורי תיחום" Style="{StaticResource PageSubHeaderStyle}"/>
+                    <TextBlock Text="ניהול אזורי תיחום לפי סדר עדיפיות, תיחום ראשון בעדיפות עליונה וכן הלאה" Style="{StaticResource PageSubHeaderStyle}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -97,10 +97,9 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <Grid Grid.Row="0" Margin="0,0,0,25">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="שם האזור: " FontSize="13" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <TextBlock Text="{Binding CurrentArea.Name}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding CurrentArea.Name}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <StackPanel Orientation="Horizontal" Margin="0,0,15,0">

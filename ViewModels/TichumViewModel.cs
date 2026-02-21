@@ -10,27 +10,30 @@ namespace DekelApp.ViewModels
     public class TichumViewModel : BaseViewModel
     {
         private readonly AppData _appData;
-        private TichumAreaModel? _currentArea;
 
         public ObservableCollection<TichumAreaModel> TichumAreas => _appData.TichumAreas;
 
         public TichumAreaModel? CurrentArea
         {
-            get => _currentArea;
+            get => _appData.SelectedTichumArea;
             set
             {
-                if (_currentArea != null)
+                var oldArea = _appData.SelectedTichumArea;
+                if (oldArea != null)
                 {
-                    _currentArea.Coordinates.CollectionChanged -= Coordinates_CollectionChanged;
-                    foreach (var c in _currentArea.Coordinates) c.PropertyChanged -= Coordinate_PropertyChanged;
+                    oldArea.Coordinates.CollectionChanged -= Coordinates_CollectionChanged;
+                    foreach (var c in oldArea.Coordinates) c.PropertyChanged -= Coordinate_PropertyChanged;
                 }
 
-                if (SetProperty(ref _currentArea, value))
+                if (_appData.SelectedTichumArea != value)
                 {
-                    if (_currentArea != null)
+                    _appData.SelectedTichumArea = value;
+                    OnPropertyChanged(nameof(CurrentArea));
+                    
+                    if (_appData.SelectedTichumArea != null)
                     {
-                        _currentArea.Coordinates.CollectionChanged += Coordinates_CollectionChanged;
-                        foreach (var c in _currentArea.Coordinates) c.PropertyChanged += Coordinate_PropertyChanged;
+                        _appData.SelectedTichumArea.Coordinates.CollectionChanged += Coordinates_CollectionChanged;
+                        foreach (var c in _appData.SelectedTichumArea.Coordinates) c.PropertyChanged += Coordinate_PropertyChanged;
                     }
                     OnPropertyChanged(nameof(IsEditingArea));
                     OnPropertyChanged(nameof(IsListView));
@@ -77,7 +80,10 @@ namespace DekelApp.ViewModels
             _appData = appData;
 
             RefreshAreaNames();
-            CurrentArea = TichumAreas.FirstOrDefault();
+            if (CurrentArea == null)
+            {
+                CurrentArea = TichumAreas.FirstOrDefault();
+            }
             AddNewAreaCommand = new RelayCommand(_ => AddNewArea());
             EditAreaCommand = new RelayCommand(area => EditArea(area));
             DeleteAreaCommand = new RelayCommand(area => DeleteArea(area));
@@ -264,9 +270,6 @@ namespace DekelApp.ViewModels
                 
                 // Final validation check
                 UpdateDuplicates();
-
-                // Automate Mikud completion
-                _appData.Formats.MFT = true;
 
                 // Auto-finish area as requested
                 FinishArea();
