@@ -15,14 +15,16 @@ namespace DekelApp.ViewModels
         private readonly AppData _appData;
         private readonly IValidationService _validationService;
         private readonly IFileService _fileService;
+        private readonly Services.IMessageService _messageService;
 
         public ICommand FinishCommand { get; }
 
-        public FinishViewModel(AppData appData, IValidationService validationService, IFileService fileService)
+        public FinishViewModel(AppData appData, IValidationService validationService, IFileService fileService, Services.IMessageService messageService)
         {
             _appData = appData;
             _validationService = validationService;
             _fileService = fileService;
+            _messageService = messageService;
             FinishCommand = new RelayCommand(async _ => await FinishAsync());
         }
 
@@ -82,7 +84,7 @@ namespace DekelApp.ViewModels
                     // _appData serialization in SaveAsync takes care of them automatically.
                     // We remove the old shapefile copy logic here.
 
-                    MessageBox.Show($"Data saved successfully to {exportPath}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _messageService.ShowMessage($"Data saved successfully to {exportPath}", "Success");
                     
                     // Open the folder in File Explorer
                     try
@@ -101,12 +103,12 @@ namespace DekelApp.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error saving data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    _messageService.ShowError($"Error saving data: {ex.Message}", "Error");
                 }
             }
             else
             {
-                MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                _messageService.ShowWarning(errorMessage, "Validation Error");
             }
         }
     }

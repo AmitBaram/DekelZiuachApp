@@ -9,6 +9,7 @@ namespace DekelApp.ViewModels
     public class TichumLayersViewModel : BaseViewModel
     {
         private readonly AppData _appData;
+        private readonly Services.IMessageService _messageService;
         private TichumAreaModel? _selectedArea;
         private string _newLayerName = string.Empty;
 
@@ -40,17 +41,15 @@ namespace DekelApp.ViewModels
         public ICommand RemoveCustomLayerCommand { get; }
 
 
-        public TichumLayersViewModel(AppData appData)
+        public TichumLayersViewModel(AppData appData, Services.IMessageService messageService)
         {
             _appData = appData;
+            _messageService = messageService;
             AddCustomLayerCommand = new RelayCommand(_ => AddCustomLayer());
             RemoveCustomLayerCommand = new RelayCommand(layer => RemoveCustomLayer(layer));
             
-            // Auto-select first area if available
-            if (TichumAreas.Any())
-            {
-                SelectedArea = TichumAreas.First();
-            }
+            // Removed auto-select first area logic to preserve navigation state (Bug Fix)
+            // if (TichumAreas.Any()) { SelectedArea = TichumAreas.First(); }
         }
 
 
@@ -61,7 +60,7 @@ namespace DekelApp.ViewModels
             // Check if it already exists
             if (SelectedArea.CustomLayers.Any(l => l.Name.Equals(NewLayerName.Trim(), System.StringComparison.OrdinalIgnoreCase)))
             {
-                System.Windows.MessageBox.Show("A custom layer with this name already exists.", "Duplicate Layer", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                _messageService.ShowWarning("A custom layer with this name already exists.", "Duplicate Layer");
                 return;
             }
 

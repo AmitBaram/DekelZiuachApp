@@ -10,6 +10,7 @@ namespace DekelApp.ViewModels
     public class TichumViewModel : BaseViewModel
     {
         private readonly AppData _appData;
+        private readonly Services.IMessageService _messageService;
 
         public ObservableCollection<TichumAreaModel> TichumAreas => _appData.TichumAreas;
 
@@ -28,15 +29,19 @@ namespace DekelApp.ViewModels
                 if (_appData.SelectedTichumArea != value)
                 {
                     _appData.SelectedTichumArea = value;
-                    OnPropertyChanged(nameof(CurrentArea));
                     
                     if (_appData.SelectedTichumArea != null)
                     {
                         _appData.SelectedTichumArea.Coordinates.CollectionChanged += Coordinates_CollectionChanged;
                         foreach (var c in _appData.SelectedTichumArea.Coordinates) c.PropertyChanged += Coordinate_PropertyChanged;
                     }
+
+                    OnPropertyChanged(nameof(CurrentArea));
                     OnPropertyChanged(nameof(IsEditingArea));
                     OnPropertyChanged(nameof(IsListView));
+                    OnPropertyChanged(nameof(CoordinateSystem));
+                    OnPropertyChanged(nameof(IsUTM));
+                    OnPropertyChanged(nameof(IsGeographic));
                     UpdateDuplicates();
                 }
             }
@@ -49,6 +54,7 @@ namespace DekelApp.ViewModels
         public ICommand EditAreaCommand { get; }
         public ICommand DeleteAreaCommand { get; }
         public ICommand FinishAreaCommand { get; }
+        public ICommand CancelAreaCommand { get; }
         
         public ICommand AddCoordinateCommand { get; }
         public ICommand DeleteCoordinateCommand { get; }
@@ -61,7 +67,7 @@ namespace DekelApp.ViewModels
             get => CurrentArea?.CoordinateSystem ?? CoordinateSystemType.UTM;
             set
             {
-                if (CurrentArea != null)
+                if (CurrentArea != null && CurrentArea.CoordinateSystem != value)
                 {
                     CurrentArea.CoordinateSystem = value;
                     OnPropertyChanged(nameof(CoordinateSystem));
@@ -75,19 +81,20 @@ namespace DekelApp.ViewModels
         public bool IsUTM => CoordinateSystem == CoordinateSystemType.UTM;
         public bool IsGeographic => CoordinateSystem == CoordinateSystemType.Geographic;
 
-        public TichumViewModel(AppData appData)
+        public TichumViewModel(AppData appData, Services.IMessageService messageService)
         {
             _appData = appData;
+            _messageService = messageService;
 
             RefreshAreaNames();
-            if (CurrentArea == null)
-            {
-                CurrentArea = TichumAreas.FirstOrDefault();
-            }
+            
+            // Removed forced selection of first area to preserve navigation state (Bug Fix)
+            // if (CurrentArea == null) { CurrentArea = TichumAreas.FirstOrDefault(); }
             AddNewAreaCommand = new RelayCommand(_ => AddNewArea());
             EditAreaCommand = new RelayCommand(area => EditArea(area));
             DeleteAreaCommand = new RelayCommand(area => DeleteArea(area));
             FinishAreaCommand = new RelayCommand(_ => FinishArea());
+            CancelAreaCommand = new RelayCommand(_ => CancelArea());
 
             AddCoordinateCommand = new RelayCommand(_ => AddCoordinate());
             DeleteCoordinateCommand = new RelayCommand(coord => DeleteCoordinate(coord));
@@ -149,8 +156,7 @@ namespace DekelApp.ViewModels
         {
             if (area is TichumAreaModel model)
             {
-                var result = System.Windows.MessageBox.Show("Are you sure you want to delete this Tichum area?", "Confirm Delete", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
-                if (result == System.Windows.MessageBoxResult.Yes)
+                if (_messageService.ShowQuestion("Are you sure you want to delete this Tichum area?", "Confirm Delete"))
                 {
                     TichumAreas.Remove(model);
                 }
@@ -175,19 +181,38 @@ namespace DekelApp.ViewModels
 
             if (!isFileUploaded && validCount < 3)
             {
-                System.Windows.MessageBox.Show("Please upload a file or add at least 3 valid coordinates before finishing this area.", "Validation Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                _messageService.ShowWarning("Please upload a file or add at least 3 valid coordinates before finishing this area.", "Validation Error");
                 return;
             }
 
             if (CurrentArea.Coordinates.Any(c => c.IsDuplicate))
             {
-                System.Windows.MessageBox.Show("Please correct or remove any identical coordinates before finishing.", "Validation Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                _messageService.ShowWarning("Please correct or remove any identical coordinates before finishing.", "Validation Error");
                 return;
             }
 
             // Unsubscribe before clearing CurrentArea
             CurrentArea.Coordinates.CollectionChanged -= Coordinates_CollectionChanged;
             foreach (var c in CurrentArea.Coordinates) c.PropertyChanged -= Coordinate_PropertyChanged;
+
+            CurrentArea = null;
+        }
+
+        private void CancelArea()
+        {
+            if (CurrentArea == null) return;
+
+            // Always remove the area when cancelling, as requested.
+            var areaToRemove = CurrentArea;
+
+            // Unsubscribe
+            CurrentArea.Coordinates.CollectionChanged -= Coordinates_CollectionChanged;
+            foreach (var c in CurrentArea.Coordinates) c.PropertyChanged -= Coordinate_PropertyChanged;
+
+            if (areaToRemove != null)
+            {
+                TichumAreas.Remove(areaToRemove);
+            }
 
             CurrentArea = null;
         }
@@ -263,10 +288,10 @@ namespace DekelApp.ViewModels
                 }
                 catch (System.Exception ex)
                 {
-                    System.Windows.MessageBox.Show($"Failed to parse Shapefile: {ex.Message}", "Parsing Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    _messageService.ShowError($"Failed to parse Shapefile: {ex.Message}", "Parsing Error");
                 }
 
-                System.Windows.MessageBox.Show($"File '{openFileDialog.SafeFileName}' uploaded and coordinates extracted successfully.", "File Uploaded", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                _messageService.ShowMessage($"File '{openFileDialog.SafeFileName}' uploaded and coordinates extracted successfully.", "File Uploaded");
                 
                 // Final validation check
                 UpdateDuplicates();

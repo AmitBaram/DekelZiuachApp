@@ -19,18 +19,23 @@ namespace DekelApp
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IValidationService, ValidationService>();
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<IMessageService, MessageService>();
 
             // Models
             services.AddSingleton<AppData>();
 
             // ViewModels
             services.AddSingleton<MainViewModel>();
-            services.AddTransient<TichumLayersViewModel>(s => new TichumLayersViewModel(s.GetRequiredService<AppData>()));
+            services.AddTransient<TichumLayersViewModel>(s => new TichumLayersViewModel(s.GetRequiredService<AppData>(), s.GetRequiredService<IMessageService>()));
             services.AddTransient<FormatsViewModel>(s => new FormatsViewModel(s.GetRequiredService<AppData>().Formats));
-            services.AddTransient<TichumViewModel>(s => new TichumViewModel(s.GetRequiredService<AppData>()));
+            services.AddTransient<TichumViewModel>(s => new TichumViewModel(s.GetRequiredService<AppData>(), s.GetRequiredService<IMessageService>()));
             services.AddTransient<YeadimViewModel>(s => new YeadimViewModel(s.GetRequiredService<AppData>().YeadimTargets, s.GetRequiredService<AppData>()));
             services.AddTransient<GeneralInfoViewModel>(s => new GeneralInfoViewModel(s.GetRequiredService<AppData>().GeneralInfo));
-            services.AddTransient<FinishViewModel>();
+            services.AddTransient<FinishViewModel>(s => new FinishViewModel(
+                s.GetRequiredService<AppData>(), 
+                s.GetRequiredService<IValidationService>(), 
+                s.GetRequiredService<IFileService>(),
+                s.GetRequiredService<IMessageService>()));
 
             // Navigation Factory
             services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider => 
