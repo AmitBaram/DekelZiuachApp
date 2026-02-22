@@ -19,10 +19,6 @@
     <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#F5F2ED"/>
     <SolidColorBrush x:Key="ElevatedCardBrush" Color="#FFFFFF"/>
 
-    <!-- Gradient for "Color changing in the word" effect with shimmer -->
-    <LinearGradientBrush x:Key="ModernGradientBrush" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#8B5E3C" Offset="0"/> <!-- Bronze -->
-        <GradientStop x:Name="ShimmerStop" Color="#D4AF37" Offset="0.5"/> <!-- Gold shimmer -->
-        <GradientStop Color="#8B5E3C" Offset="1"/>
-    </LinearGradientBrush>
+    <!-- Solid Brown Brush (was gradient) -->
+    <SolidColorBrush x:Key="ModernGradientBrush" Color="{StaticResource PrimaryBlueColor}"/>
 </ResourceDictionary>
