@@ -18,6 +18,9 @@ namespace DekelApp.Models
         [JsonPropertyName("Yeadim")]
         public ObservableCollection<YeadimTargetModel> YeadimTargets { get; set; } = new();
 
+        [JsonPropertyName("GeoCells")]
+        public List<string> GeoCells { get; set; } = new();
+
         public CoordinateSystemType YeadimCoordinateSystem
         {
             get => _yeadimCoordinateSystem;

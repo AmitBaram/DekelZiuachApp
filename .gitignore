@@ -57,3 +57,6 @@ TestResults.xml
 # Artifacts/logs
 logs/
 PublishAllDotNet/
+publish_release_v3/DekelApp.exe
+publish_release_v3/DekelApp.pdb
+*.exe

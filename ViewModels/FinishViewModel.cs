@@ -16,15 +16,17 @@ namespace DekelApp.ViewModels
         private readonly IValidationService _validationService;
         private readonly IFileService _fileService;
         private readonly Services.IMessageService _messageService;
+        private readonly IGeoCellService _geoCellService;
 
         public ICommand FinishCommand { get; }
 
-        public FinishViewModel(AppData appData, IValidationService validationService, IFileService fileService, Services.IMessageService messageService)
+        public FinishViewModel(AppData appData, IValidationService validationService, IFileService fileService, Services.IMessageService messageService, IGeoCellService geoCellService)
         {
             _appData = appData;
             _validationService = validationService;
             _fileService = fileService;
             _messageService = messageService;
+            _geoCellService = geoCellService;
             FinishCommand = new RelayCommand(async _ => await FinishAsync());
         }
 
@@ -74,6 +76,9 @@ namespace DekelApp.ViewModels
                             target.Zone = null;
                         }
                     }
+
+                    // Calculate GeoCells from tichum coordinates
+                    _appData.GeoCells = _geoCellService.CalculateGeoCells(_appData.TichumAreas);
 
                     // Save JSON
                     await _fileService.SaveAsync(_appData, jsonFilePath);

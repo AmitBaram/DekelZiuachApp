@@ -46,12 +46,13 @@
             <Grid Grid.Row="0" Background="{DynamicResource SidebarBackgroundBrush}">
                 <TextBlock Text="Dekel" VerticalAlignment="Center" Margin="16,0"
                            FontSize="12" FontWeight="SemiBold" Opacity="0.5"
-                           Foreground="{DynamicResource PrimaryTextBrush}"/>
+                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           HorizontalAlignment="Right"/>
                 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
-                    <Button x:Name="MinimizeBtn" Click="Minimize_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="−"/>
-                    <Button x:Name="MaximizeBtn" Click="Maximize_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="▢"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="True">
                     <Button x:Name="CloseBtn" Click="Close_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="✕" Foreground="#E81123"/>
+                    <Button x:Name="MaximizeBtn" Click="Maximize_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="▢"/>
+                    <Button x:Name="MinimizeBtn" Click="Minimize_Click" Width="46" Style="{StaticResource WindowControlButtonStyle}" Content="−"/>
                 </StackPanel>
             </Grid>
 
@@ -90,7 +91,7 @@
                                                FontWeight="Black" 
                                                Foreground="{DynamicResource ModernGradientBrush}"
                                                Margin="0,0,0,-4"/>
-                                    <TextBlock Text="ציוד מבצעי" 
+                                    <TextBlock Text="ציוח מבצעי" 
                                                FontSize="11" 
                                                FontWeight="SemiBold"
                                                Foreground="{DynamicResource DeepChocolateBrush}" 

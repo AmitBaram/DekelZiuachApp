@@ -20,6 +20,7 @@ namespace DekelApp
             services.AddSingleton<IValidationService, ValidationService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IMessageService, MessageService>();
+            services.AddSingleton<IGeoCellService, GeoCellService>();
 
             // Models
             services.AddSingleton<AppData>();
@@ -32,10 +33,11 @@ namespace DekelApp
             services.AddTransient<YeadimViewModel>(s => new YeadimViewModel(s.GetRequiredService<AppData>().YeadimTargets, s.GetRequiredService<AppData>()));
             services.AddTransient<GeneralInfoViewModel>(s => new GeneralInfoViewModel(s.GetRequiredService<AppData>().GeneralInfo));
             services.AddTransient<FinishViewModel>(s => new FinishViewModel(
-                s.GetRequiredService<AppData>(), 
-                s.GetRequiredService<IValidationService>(), 
+                s.GetRequiredService<AppData>(),
+                s.GetRequiredService<IValidationService>(),
                 s.GetRequiredService<IFileService>(),
-                s.GetRequiredService<IMessageService>()));
+                s.GetRequiredService<IMessageService>(),
+                s.GetRequiredService<IGeoCellService>()));
 
             // Navigation Factory
             services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider => 
