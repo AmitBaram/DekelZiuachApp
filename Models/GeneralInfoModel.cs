@@ -8,5 +8,6 @@ namespace DekelApp.Models
         public string? OperationName { get; set; }
         public DateTime? Date { get; set; } = DateTime.Now;
         public string? GeneralNotes { get; set; }
+        public string? ClassificationLevel { get; set; }
     }
 }

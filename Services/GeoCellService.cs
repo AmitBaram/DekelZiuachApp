@@ -44,23 +44,12 @@ namespace DekelApp.Services
                 if (latLonPoints.Count == 0)
                     continue;
 
-                // Find bounding box and enumerate all 1-degree cells
-                double minLat = latLonPoints.Min(p => p.Lat);
-                double maxLat = latLonPoints.Max(p => p.Lat);
-                double minLon = latLonPoints.Min(p => p.Lon);
-                double maxLon = latLonPoints.Max(p => p.Lon);
-
-                int latStart = (int)Math.Floor(minLat);
-                int latEnd = (int)Math.Floor(maxLat);
-                int lonStart = (int)Math.Floor(minLon);
-                int lonEnd = (int)Math.Floor(maxLon);
-
-                for (int lat = latStart; lat <= latEnd; lat++)
+                // Add the GeoCell for each actual coordinate point
+                foreach (var point in latLonPoints)
                 {
-                    for (int lon = lonStart; lon <= lonEnd; lon++)
-                    {
-                        allGeoCells.Add(FormatGeoCell(lat, lon));
-                    }
+                    int latCell = (int)Math.Floor(point.Lat);
+                    int lonCell = (int)Math.Floor(point.Lon);
+                    allGeoCells.Add(FormatGeoCell(latCell, lonCell));
                 }
             }
 

@@ -144,6 +144,12 @@ namespace DekelApp.Services
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(gi.ClassificationLevel))
+            {
+                errorMessage = "יש לבחור רמת סיווג במידע הכללי.";
+                return false;
+            }
+
             return true;
         }
     }

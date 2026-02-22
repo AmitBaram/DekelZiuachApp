@@ -31,6 +31,12 @@ namespace DekelApp.ViewModels
             set { if (_info.GeneralNotes != value) { _info.GeneralNotes = value; OnPropertyChanged(); } }
         }
 
+        public string? ClassificationLevel
+        {
+            get => _info.ClassificationLevel;
+            set { if (_info.ClassificationLevel != value) { _info.ClassificationLevel = value; OnPropertyChanged(); } }
+        }
+
         public GeneralInfoViewModel(GeneralInfoModel info)
         {
             _info = info;
